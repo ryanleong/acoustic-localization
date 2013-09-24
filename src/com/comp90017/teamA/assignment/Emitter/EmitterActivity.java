@@ -25,6 +25,8 @@ public class EmitterActivity extends Activity implements View.OnClickListener, S
 	private final int			sampleRate			= 44100;
 	private double				freq				= 1000;			// hz
 
+	private int					pulseCount			= 5;
+
 	private byte				generatedSnd[];
 
 	private Handler				handler				= new Handler ();
@@ -39,6 +41,9 @@ public class EmitterActivity extends Activity implements View.OnClickListener, S
 	private SeekBar				durSeekBar;
 
 	private TextView			timerTV;
+
+	private SeekBar				pulseCountSeekBar;
+	private TextView			pulseCountTV;
 
 	private Button				playButton;
 	private Button				playPulseButton;
@@ -60,6 +65,9 @@ public class EmitterActivity extends Activity implements View.OnClickListener, S
 		Button durLessButton = (Button) findViewById (R.id.durLessButton);
 		Button durMoreButton = (Button) findViewById (R.id.durMoreButton);
 
+		pulseCountSeekBar = (SeekBar) findViewById (R.id.pulseCountSeekBar);
+		pulseCountTV = (TextView) findViewById (R.id.pulseCountTV);
+
 		playButton = (Button) findViewById (R.id.playButton);
 		playPulseButton = (Button) findViewById (R.id.playPulseButton);
 
@@ -78,6 +86,10 @@ public class EmitterActivity extends Activity implements View.OnClickListener, S
 		durSeekBar.setOnSeekBarChangeListener (this);
 		durLessButton.setOnClickListener (this);
 		durMoreButton.setOnClickListener (this);
+
+		pulseCountSeekBar.setOnSeekBarChangeListener (this);
+		pulseCount = pulseCountSeekBar.getProgress () + 2;
+		pulseCountTV.setText (pulseCount + "");
 
 		playButton.setOnClickListener (this);
 		playPulseButton.setOnClickListener (this);
@@ -140,13 +152,19 @@ public class EmitterActivity extends Activity implements View.OnClickListener, S
 				durSeekBar.setProgress ((int) (duration / DUR_SEEK_BAR_SCALE));
 				break;
 			case R.id.playPulseButton :
+				// Setup TaskedTimer to emit the sound in pulses. This occurs as: sound for duration
+				// d -> silence for duration d ... etc
+
 				playPulseButton.setEnabled (false);
 				generateTone ();
 				final TaskedTimer t = new TaskedTimer (timerTV);
 
+				// Schedule sound to occur straight away
 				t.addTask (0, new PulseTimeredTask (generatedSnd, sampleRate));
+				// Schedule sound to pulse (occur periodically).
 				t.addPeriodicTask ((long) (duration * 2 * 1000), new PulseTimeredTask (generatedSnd, sampleRate));
-				t.addTask (1000 * 5, new ScheduledTask () {
+				// Schedule task to stop the timer.
+				t.addTask ((long) ((pulseCount - 1) * duration * 2 * 1000), new ScheduledTask () {
 					private static final long	serialVersionUID	= 1L;
 
 
@@ -183,8 +201,11 @@ public class EmitterActivity extends Activity implements View.OnClickListener, S
 				duration = progress * DUR_SEEK_BAR_SCALE;
 				durTV.setText (duration + "");
 				break;
+			case R.id.pulseCountSeekBar :
+				pulseCount = progress + 2;
+				pulseCountTV.setText (pulseCount + "");
+				break;
 		}
-
 	}
 
 

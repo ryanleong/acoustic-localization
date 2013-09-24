@@ -98,14 +98,6 @@
         android:text="@string/filler" />
 
     <Button
-        android:id="@+id/playButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/textView2"
-        android:layout_below="@+id/textView2"
-        android:text="@string/Play" />
-
-    <Button
         android:id="@+id/playPulseButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -121,5 +113,39 @@
         android:layout_alignRight="@+id/playPulseButton"
         android:layout_below="@+id/playPulseButton"
         android:text="@string/filler" />
+
+    <SeekBar
+        android:id="@+id/pulseCountSeekBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/textView2" 
+        android:max="8"
+        android:progress="3"/>
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/pulseCountSeekBar"
+        android:layout_below="@+id/pulseCountSeekBar"
+        android:text="@string/pulse_count" />
+
+    <TextView
+        android:id="@+id/pulseCountTV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/textView3"
+        android:layout_alignBottom="@+id/textView3"
+        android:layout_alignRight="@+id/pulseCountSeekBar"
+        android:text="@string/filler" />
+
+    <Button
+        android:id="@+id/playButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignRight="@+id/textView1"
+        android:layout_below="@+id/textView3"
+        android:text="@string/Play" />
 
 </RelativeLayout>

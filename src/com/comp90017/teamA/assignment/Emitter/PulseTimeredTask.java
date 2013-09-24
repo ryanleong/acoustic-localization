@@ -1,9 +1,6 @@
 package com.comp90017.teamA.assignment.Emitter;
 
 
-import android.util.Log;
-
-
 import com.AniFichadia.AniFichadiaToolkitAndroid.Timing.ScheduledTask;
 
 
@@ -26,8 +23,15 @@ public class PulseTimeredTask extends ScheduledTask
 	@ Override
 	public void doTask(Object... params)
 	{
-		Log.d ("asd", "playing");
-		ToneGenerator.playSound (generatedSnd, sampleRate);
+		// Catch exceptions just in case. IllegalStateException occurs sometimes
+		try
+		{
+			ToneGenerator.playSound (generatedSnd, sampleRate);
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
 	}
 
 

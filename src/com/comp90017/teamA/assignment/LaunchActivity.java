@@ -41,7 +41,9 @@ public class LaunchActivity extends Activity implements View.OnClickListener
 				c = EmitterActivity.class;
 				break;
 			case R.id.listenerButton :
+				// c = ListenerActivity.class;
 			case R.id.settingsButton :
+				// c = SettingsActivity.class;
 				Toast.makeText (getApplicationContext (), "Feature not available", Toast.LENGTH_LONG).show ();
 				break;
 			default :
