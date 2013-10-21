@@ -2,6 +2,7 @@ package com.comp90017.teamA.assignment.Emitter;
 
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -14,6 +15,7 @@ import android.widget.TextView;
 
 import com.AniFichadia.AniFichadiaToolkitAndroid.Timing.ScheduledTask;
 import com.AniFichadia.AniFichadiaToolkitAndroid.Timing.TaskedTimer;
+import com.comp90017.teamA.assignment.MyParcelable;
 import com.comp90017.teamA.assignment.R;
 
 
@@ -52,6 +54,9 @@ public class EmitterActivity extends Activity implements View.OnClickListener, S
 	@ Override
 	protected void onCreate(Bundle savedInstanceState)
 	{
+		Intent intent = getIntent();
+		MyParcelable data = intent.getParcelableExtra("DATA");
+		
 		super.onCreate (savedInstanceState);
 		setContentView (R.layout.activity_emitter);
 

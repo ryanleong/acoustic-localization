@@ -3,6 +3,7 @@ package com.comp90017.teamA.assignment.Listener;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -19,6 +20,7 @@ import android.widget.Toast;
 
 import com.AniFichadia.AniFichadiaToolkitAndroid.Timing.ScheduledTask;
 import com.AniFichadia.AniFichadiaToolkitAndroid.Timing.TaskedTimer;
+import com.comp90017.teamA.assignment.MyParcelable;
 import com.comp90017.teamA.assignment.R;
 import com.comp90017.teamA.assignment.Emitter.PulseTimeredTask;
 import com.comp90017.teamA.assignment.Emitter.ToneGenerator;
@@ -48,6 +50,9 @@ public class ListenerActivity extends Activity implements SensorEventListener, O
 	@ Override
 	public void onCreate(Bundle savedInstanceState)
 	{
+		Intent intent = getIntent();
+		MyParcelable data = intent.getParcelableExtra("DATA");
+		
 		super.onCreate (savedInstanceState);
 		setContentView (R.layout.activity_listener);
 		mInitialized = false;

@@ -2,9 +2,11 @@ package com.comp90017.teamA.assignment.Graph;
 
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 
 
+import com.comp90017.teamA.assignment.MyParcelable;
 import com.comp90017.teamA.assignment.R;
 
 
@@ -14,6 +16,9 @@ public class GraphActivity extends Activity
 	@ Override
 	protected void onCreate(Bundle savedInstanceState)
 	{
+		Intent intent = getIntent();
+		MyParcelable data = intent.getParcelableExtra("DATA");
+		
 		super.onCreate (savedInstanceState);
 		setContentView (R.layout.activity_graph);
 
