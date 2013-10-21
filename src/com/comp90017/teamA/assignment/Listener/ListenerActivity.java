@@ -8,21 +8,40 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
-import android.widget.ImageView;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemSelectedListener;
+import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
+import com.AniFichadia.AniFichadiaToolkitAndroid.Timing.ScheduledTask;
+import com.AniFichadia.AniFichadiaToolkitAndroid.Timing.TaskedTimer;
 import com.comp90017.teamA.assignment.R;
+import com.comp90017.teamA.assignment.Emitter.PulseTimeredTask;
+import com.comp90017.teamA.assignment.Emitter.ToneGenerator;
+import com.comp90017.teamA.assignment.Graph.GraphView;
 
 
-public class ListenerActivity extends Activity implements SensorEventListener
+public class ListenerActivity extends Activity implements SensorEventListener, OnItemSelectedListener
 {
 	private float			mLastX, mLastY, mLastZ;
 	private boolean			mInitialized;
 	private SensorManager	mSensorManager;
 	private Sensor			mAccelerometer;
-	private final float		NOISE	= 2f;
+	private final float		NOISE		= 1f;
+
+	private int				listenerID	= 1;
+
+	private double			duration	= 1.0;		// seconds
+	private final int		sampleRate	= 44100;
+	private double			freq		= 1000;	// hz
+
+	private byte			generatedSnd[];
+
+	private GraphView		gv;
 
 
 	/** Called when the activity is first created. */
@@ -35,6 +54,65 @@ public class ListenerActivity extends Activity implements SensorEventListener
 		mSensorManager = (SensorManager) getSystemService (Context.SENSOR_SERVICE);
 		mAccelerometer = mSensorManager.getDefaultSensor (Sensor.TYPE_ACCELEROMETER);
 		mSensorManager.registerListener (this, mAccelerometer, SensorManager.SENSOR_DELAY_NORMAL);
+
+		Spinner listenerIDSpinner = (Spinner) findViewById (R.id.listener_id_spinner);
+		listenerIDSpinner.setOnItemSelectedListener (this);
+
+		gv = (GraphView) findViewById (R.id.testGraphView);
+	}
+
+
+	public void setupListeners()
+	{
+		// TODO Start listener thread or whatever to capture other listeners pulses
+		generateTone ();
+		long scheduledEmit = listenerID * 3 * 1000;
+		final TaskedTimer t = new TaskedTimer (null);
+
+		// TODO schedule task to stop listener before emitting?
+
+		// Schedule sound to occur
+		t.addTask (scheduledEmit, new PulseTimeredTask (generatedSnd, sampleRate));
+		// Schedule Timer termination
+		t.addTask (scheduledEmit, new ScheduledTask () {
+			private static final long	serialVersionUID	= 1L;
+
+
+			@ Override
+			public void doTask(Object... params)
+			{
+				t.stopTimer ();
+				// TODO: restart listener?
+			}
+
+
+			@ Override
+			public void undoTask(Object... params)
+			{}
+		});
+	}
+
+
+	public void trackEmitter()
+	{
+		// start up listener thread.
+		// when audio peaks levels hit the apex of its amplitude, save/store/relay amplitude and
+		// calculate distance.
+		// emit distance
+		// Collect distances
+		// build graph
+
+		// gv.addEmitterEdge (GraphView.landmark1, myDistance);
+		// gv.addEmitterEdge (GraphView.landmark2, otherDistance1);
+		// gv.addEmitterEdge (GraphView.landmark2, otherDistance2);
+	}
+
+
+	private void generateTone()
+	{
+		Log.d ("asd", "Generating tone using freq: " + freq + "\tdur: " + duration);
+		generatedSnd = null;
+		generatedSnd = ToneGenerator.generateTone (freq, sampleRate, duration);
 	}
 
 
@@ -65,7 +143,7 @@ public class ListenerActivity extends Activity implements SensorEventListener
 		TextView tvX = (TextView) findViewById (R.id.x_axis);
 		TextView tvY = (TextView) findViewById (R.id.y_axis);
 		TextView tvZ = (TextView) findViewById (R.id.z_axis);
-		ImageView iv = (ImageView) findViewById (R.id.image);
+		// ImageView iv = (ImageView) findViewById (R.id.image);
 		float x = event.values[0];
 		float y = event.values[1];
 		float z = event.values[2];
@@ -96,19 +174,33 @@ public class ListenerActivity extends Activity implements SensorEventListener
 			tvX.setText (Float.toString (deltaX));
 			tvY.setText (Float.toString (deltaY));
 			tvZ.setText (Float.toString (deltaZ));
-			iv.setVisibility (View.VISIBLE);
-			if (deltaX > deltaY)
-			{
-				iv.setImageResource (R.drawable.horizontal);
-			}
-			else if (deltaY > deltaX)
-			{
-				iv.setImageResource (R.drawable.vertical);
-			}
-			else
-			{
-				iv.setVisibility (View.INVISIBLE);
-			}
+			// iv.setVisibility (View.VISIBLE);
+			// if (deltaX > deltaY)
+			// {
+			// iv.setImageResource (R.drawable.horizontal);
+			// }
+			// else if (deltaY > deltaX)
+			// {
+			// iv.setImageResource (R.drawable.vertical);
+			// }
+			// else
+			// {
+			// iv.setVisibility (View.INVISIBLE);
+			// }
 		}
 	}
+
+
+	@ Override
+	public void onItemSelected(AdapterView<?> parent, View view, int pos, long id)
+	{
+		listenerID = Integer.parseInt (parent.getItemAtPosition (pos).toString ());
+		Toast.makeText (getApplicationContext (), "Selected ID: " + listenerID, Toast.LENGTH_SHORT).show ();
+	}
+
+
+	@ Override
+	public void onNothingSelected(AdapterView<?> arg0)
+	{}
+
 }

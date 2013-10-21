@@ -39,7 +39,7 @@
         android:id="@+id/emitterButton"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/settingsButton"
+        android:layout_alignLeft="@+id/graphTestButton"
         android:layout_alignRight="@+id/listenerButton"
         android:layout_below="@+id/textView3"
         android:text="@string/emitter" />
@@ -53,11 +53,11 @@
         android:text="@string/listener" />
 
     <Button
-        android:id="@+id/settingsButton"
+        android:id="@+id/graphTestButton"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/listenerButton"
         android:layout_centerHorizontal="true"
-        android:text="@string/settings" />
+        android:text="@string/graph_test" />
 
 </RelativeLayout>

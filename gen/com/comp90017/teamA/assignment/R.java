@@ -9,6 +9,7 @@ package com.comp90017.teamA.assignment;
 
 public final class R {
     public static final class array {
+        public static final int listener_ids=0x7f060001;
         public static final int pulse_counts=0x7f060000;
     }
     public static final class attr {
@@ -39,14 +40,14 @@ public final class R {
         public static final int freqMoreButton=0x7f090001;
         public static final int freqSeekBar=0x7f090002;
         public static final int freqTV=0x7f090003;
-        public static final int graphView=0x7f090010;
-        public static final int image=0x7f090017;
+        public static final int graphTestButton=0x7f090012;
         public static final int listenerButton=0x7f090013;
+        public static final int listener_id_spinner=0x7f090017;
         public static final int playButton=0x7f09000b;
         public static final int playPulseButton=0x7f09000a;
         public static final int pulseCountSeekBar=0x7f09000d;
         public static final int pulseCountTV=0x7f09000f;
-        public static final int settingsButton=0x7f090012;
+        public static final int testGraphView=0x7f090010;
         public static final int textView1=0x7f090004;
         public static final int textView2=0x7f090008;
         public static final int textView3=0x7f09000e;
@@ -68,6 +69,7 @@ public final class R {
     }
     public static final class string {
         public static final int Play=0x7f050004;
+        public static final int accelerometer=0x7f050017;
         public static final int action_settings=0x7f050001;
         public static final int app_name=0x7f050000;
         public static final int assignment_name=0x7f050007;
@@ -75,20 +77,25 @@ public final class R {
         public static final int emitter=0x7f050008;
         public static final int filler=0x7f05000d;
         public static final int frequency=0x7f050003;
+        public static final int graph_test=0x7f05000a;
         public static final int gt=0x7f05000c;
         public static final int hello_world=0x7f050002;
         public static final int listener=0x7f050009;
+        public static final int listener_id=0x7f050016;
+        public static final int listener_id_prompt=0x7f050018;
         public static final int lt=0x7f05000b;
         public static final int play_pulse=0x7f05000f;
         public static final int pulse_count=0x7f050012;
-        public static final int settings=0x7f05000a;
         public static final int subject_name=0x7f050006;
         public static final int team_members=0x7f050010;
         public static final int title_activity_emitter=0x7f050011;
-        public static final int title_activity_graph=0x7f050015;
-        public static final int title_activity_graph_test=0x7f050014;
+        public static final int title_activity_graph=0x7f05001b;
+        public static final int title_activity_graph_test=0x7f05001a;
         public static final int title_activity_launch=0x7f050005;
-        public static final int title_activity_listener=0x7f050013;
+        public static final int title_activity_listener=0x7f050019;
+        public static final int x_axis=0x7f050013;
+        public static final int y_axis=0x7f050014;
+        public static final int z_axis=0x7f050015;
     }
     public static final class style {
         /** 

@@ -9,7 +9,7 @@
     tools:context=".GraphActivity" >
 
     <com.comp90017.teamA.assignment.Graph.GraphView
-        android:id="@+id/graphView"
+        android:id="@+id/testGraphView"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:layout_alignParentLeft="true"
