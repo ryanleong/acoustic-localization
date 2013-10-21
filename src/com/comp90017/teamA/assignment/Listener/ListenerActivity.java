@@ -22,7 +22,7 @@ public class ListenerActivity extends Activity implements SensorEventListener
 	private boolean			mInitialized;
 	private SensorManager	mSensorManager;
 	private Sensor			mAccelerometer;
-	private final float		NOISE	= 1f;
+	private final float		NOISE	= 2f;
 
 
 	/** Called when the activity is first created. */
