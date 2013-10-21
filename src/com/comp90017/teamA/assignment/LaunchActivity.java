@@ -43,10 +43,10 @@ public class LaunchActivity extends Activity implements View.OnClickListener
 		{
 			case R.id.emitterButton :
 				// TEMPORARY SEND DATA THROUGH TWITTER
-				new SendData ().execute (new String[] {""});
+				//new SendData ().execute ("data to send");
 
 				// TEMPORARY RECEIVE DATA THROUGH TWITTER
-				new ReceiveData ().execute (new String[] {""});
+				//new ReceiveData ().execute ();
 
 				c = EmitterActivity.class;
 				break;

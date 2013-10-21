@@ -27,7 +27,7 @@ public class SendData extends AsyncTask<String, Void, String>
 			// Data format
 			// ID,Time,Data
 
-			String tweetDataString = "ID," + System.currentTimeMillis () + "," + "Data";
+			String tweetDataString = "ID," + System.currentTimeMillis () + "," + params[0];
 
 			twitter4j.Status status = twitter.updateStatus (tweetDataString);
 
