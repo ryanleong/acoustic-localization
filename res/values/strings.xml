@@ -11,10 +11,10 @@
     <string name="assignment_name">Assignment 1: Application</string>
     <string name="emitter">Emitter</string>
     <string name="listener">Listener</string>
-    <string name="settings">Settings</string>
+    <string name="graph_test">Graph Test</string>
     <string name="lt">&lt;</string>
     <string name="gt">&gt;</string>
-    <string name="filler">asd</string>
+    <string name="filler">unk</string>
     <string name="duration">Duration</string>
     <string name="play_pulse">Play Pulse</string>
     <string name="team_members">Aniruddh Fichadia (569005), Ryan Leong (395463), Chaoheng Hu (630839)</string>
