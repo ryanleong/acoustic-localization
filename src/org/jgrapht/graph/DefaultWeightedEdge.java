@@ -62,6 +62,18 @@ public class DefaultWeightedEdge extends DefaultEdge
 	double						weight				= WeightedGraph.DEFAULT_EDGE_WEIGHT;
 
 
+	public DefaultWeightedEdge()
+	{
+		super();
+	}
+	
+	public DefaultWeightedEdge (double weight)
+	{
+		super ();
+		this.weight = weight;
+	}
+
+
 	// ~ Methods ----------------------------------------------------------------
 
 	/**

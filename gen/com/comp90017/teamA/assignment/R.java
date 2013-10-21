@@ -39,7 +39,7 @@ public final class R {
         public static final int freqMoreButton=0x7f090001;
         public static final int freqSeekBar=0x7f090002;
         public static final int freqTV=0x7f090003;
-        public static final int graphTest1=0x7f090010;
+        public static final int graphView=0x7f090010;
         public static final int image=0x7f090017;
         public static final int listenerButton=0x7f090013;
         public static final int playButton=0x7f09000b;
