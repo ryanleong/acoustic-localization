@@ -41,13 +41,13 @@ public final class R {
         public static final int freqSeekBar=0x7f090002;
         public static final int freqTV=0x7f090003;
         public static final int graphTestButton=0x7f090012;
-        public static final int graphView=0x7f090010;
         public static final int listenerButton=0x7f090013;
         public static final int listener_id_spinner=0x7f090017;
         public static final int playButton=0x7f09000b;
         public static final int playPulseButton=0x7f09000a;
         public static final int pulseCountSeekBar=0x7f09000d;
         public static final int pulseCountTV=0x7f09000f;
+        public static final int testGraphView=0x7f090010;
         public static final int textView1=0x7f090004;
         public static final int textView2=0x7f090008;
         public static final int textView3=0x7f09000e;

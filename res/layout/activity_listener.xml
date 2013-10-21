@@ -78,6 +78,11 @@
         android:entries="@array/listener_ids"
         android:prompt="@string/listener_id_prompt" />
 
+    <com.comp90017.teamA.assignment.Graph.GraphView
+        android:id="@+id/testGraphView"
+        android:layout_width="match_parent"
+        android:layout_height="fill_parent" />
+
     <!-- <ImageView -->
     <!-- android:id="@+id/image" -->
     <!-- android:layout_width="wrap_content" -->

@@ -8,6 +8,7 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
@@ -16,7 +17,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
+import com.AniFichadia.AniFichadiaToolkitAndroid.Timing.ScheduledTask;
+import com.AniFichadia.AniFichadiaToolkitAndroid.Timing.TaskedTimer;
 import com.comp90017.teamA.assignment.R;
+import com.comp90017.teamA.assignment.Emitter.PulseTimeredTask;
+import com.comp90017.teamA.assignment.Emitter.ToneGenerator;
+import com.comp90017.teamA.assignment.Graph.GraphView;
 
 
 public class ListenerActivity extends Activity implements SensorEventListener, OnItemSelectedListener
@@ -28,6 +34,14 @@ public class ListenerActivity extends Activity implements SensorEventListener, O
 	private final float		NOISE		= 1f;
 
 	private int				listenerID	= 1;
+
+	private double			duration	= 1.0;		// seconds
+	private final int		sampleRate	= 44100;
+	private double			freq		= 1000;	// hz
+
+	private byte			generatedSnd[];
+
+	private GraphView		gv;
 
 
 	/** Called when the activity is first created. */
@@ -43,6 +57,62 @@ public class ListenerActivity extends Activity implements SensorEventListener, O
 
 		Spinner listenerIDSpinner = (Spinner) findViewById (R.id.listener_id_spinner);
 		listenerIDSpinner.setOnItemSelectedListener (this);
+
+		gv = (GraphView) findViewById (R.id.testGraphView);
+	}
+
+
+	public void setupListeners()
+	{
+		// TODO Start listener thread or whatever to capture other listeners pulses
+		generateTone ();
+		long scheduledEmit = listenerID * 3 * 1000;
+		final TaskedTimer t = new TaskedTimer (null);
+
+		// TODO schedule task to stop listener before emitting?
+
+		// Schedule sound to occur
+		t.addTask (scheduledEmit, new PulseTimeredTask (generatedSnd, sampleRate));
+		// Schedule Timer termination
+		t.addTask (scheduledEmit, new ScheduledTask () {
+			private static final long	serialVersionUID	= 1L;
+
+
+			@ Override
+			public void doTask(Object... params)
+			{
+				t.stopTimer ();
+				// TODO: restart listener?
+			}
+
+
+			@ Override
+			public void undoTask(Object... params)
+			{}
+		});
+	}
+
+
+	public void trackEmitter()
+	{
+		// start up listener thread.
+		// when audio peaks levels hit the apex of its amplitude, save/store/relay amplitude and
+		// calculate distance.
+		// emit distance
+		// Collect distances
+		// build graph
+
+		// gv.addEmitterEdge (GraphView.landmark1, myDistance);
+		// gv.addEmitterEdge (GraphView.landmark2, otherDistance1);
+		// gv.addEmitterEdge (GraphView.landmark2, otherDistance2);
+	}
+
+
+	private void generateTone()
+	{
+		Log.d ("asd", "Generating tone using freq: " + freq + "\tdur: " + duration);
+		generatedSnd = null;
+		generatedSnd = ToneGenerator.generateTone (freq, sampleRate, duration);
 	}
 
 
@@ -132,4 +202,5 @@ public class ListenerActivity extends Activity implements SensorEventListener, O
 	@ Override
 	public void onNothingSelected(AdapterView<?> arg0)
 	{}
+
 }

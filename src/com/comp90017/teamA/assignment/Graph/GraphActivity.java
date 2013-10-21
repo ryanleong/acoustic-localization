@@ -17,7 +17,7 @@ public class GraphActivity extends Activity
 		super.onCreate (savedInstanceState);
 		setContentView (R.layout.activity_graph);
 
-		GraphView gv = (GraphView) findViewById (R.id.graphView);
+		GraphView gv = (GraphView) findViewById (R.id.testGraphView);
 
 		gv.resetGraph ();
 		gv.addLandmarkEdge (GraphView.landmark1, GraphView.landmark2, 2 * 10);
