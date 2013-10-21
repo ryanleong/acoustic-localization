@@ -10,9 +10,6 @@ import android.widget.Button;
 import android.widget.Toast;
 
 
-import com.AniFichadia.Toolkit.Utilities.ReceiveData;
-import com.AniFichadia.Toolkit.Utilities.SendData;
-import com.AniFichadia.Toolkit.Utilities.SoundMeter;
 import com.comp90017.teamA.assignment.Emitter.EmitterActivity;
 import com.comp90017.teamA.assignment.Graph.GraphActivity;
 import com.comp90017.teamA.assignment.Listener.ListenerActivity;

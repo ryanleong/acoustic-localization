@@ -240,7 +240,7 @@ public class GraphView extends View
 			}
 			else
 			{
-				canvas.drawText ("Not enough data to draw", 0f, 0f, blackColor);
+				canvas.drawText ("Not enough data to draw, emitter could be in an infinite number of locations.", 0f, 0f, blackColor);
 			}
 		}
 		catch (Exception e)
