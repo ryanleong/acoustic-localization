@@ -40,7 +40,7 @@ public class GraphView extends View
 
 	public boolean												emitterSet			= false;
 
-	public static double										estimationNoise		= 2;
+	public static double										estimationNoise		= 1;
 
 
 	public GraphView (Context context, AttributeSet attr)
@@ -80,8 +80,8 @@ public class GraphView extends View
 	{
 		super.onDraw (canvas);
 
-		int offsetX = 100;
-		int offsetY = 100;
+		int offsetX = 125;
+		int offsetY = 125;
 		int scale = 20;
 		int vertexSize = 5;
 
@@ -89,7 +89,7 @@ public class GraphView extends View
 		{
 			if (defaultGraph)
 			{
-				canvas.drawText ("Default graph, not actual results", 0, 0, blackColor);
+				canvas.drawText ("Default graph, not actual results", 10f, 10f, blackColor);
 			}
 
 			DefaultWeightedEdge l1L2Edge = g.getEdge (landmark1, landmark2);
@@ -116,19 +116,19 @@ public class GraphView extends View
 			Coordinate[] landmark3PossibleCoord = getP3 (landmark1Coord, l3L1Edge.getWeight (), landmark2Coord, l2L3Edge.getWeight ());
 			Coordinate landmark3Coord = landmark3PossibleCoord[0];
 
-			int numEdges = countNonNulls (emitterLandmark1Edge, emitterLandmark2Edge, emitterLandmark3Edge);
+			int numEmitterEdges = countNonNulls (emitterLandmark1Edge, emitterLandmark2Edge, emitterLandmark3Edge);
 
 			Coordinate[] emitterPossibles = null;
 
-			boolean draw = true;
+			boolean emitterValid = true;
 
 			if (emitterSet)
 			{
-				if (numEdges == numLandmarks)
+				if (numEmitterEdges == numLandmarks)
 				{
 					emitterPossibles = getP3 (landmark1Coord, emitterLandmark1Edge.getWeight (), landmark2Coord, emitterLandmark2Edge.getWeight ());
 				}
-				else if (numEdges == numLandmarks - 1)
+				else if (numEmitterEdges == numLandmarks - 1)
 				{
 					DefaultWeightedEdge usedELEdge1 = null;
 					Coordinate usedELCoord1 = null;
@@ -145,7 +145,7 @@ public class GraphView extends View
 						usedELCoord1 = landmark3Coord;
 
 						usedELEdge2 = emitterLandmark2Edge;
-						usedELCoord1 = landmark2Coord;
+						usedELCoord2 = landmark2Coord;
 
 						// unusedELEdge = emitterLandmark1Edge;
 						// unusedELCoord = landmark1Coord;
@@ -156,7 +156,7 @@ public class GraphView extends View
 						usedELCoord1 = landmark1Coord;
 
 						usedELEdge2 = emitterLandmark3Edge;
-						usedELCoord1 = landmark3Coord;
+						usedELCoord2 = landmark3Coord;
 
 						// unusedELEdge = emitterLandmark2Edge;
 						// unusedELCoord = landmark2Coord;
@@ -167,7 +167,7 @@ public class GraphView extends View
 						usedELCoord1 = landmark1Coord;
 
 						usedELEdge2 = emitterLandmark2Edge;
-						usedELCoord1 = landmark2Coord;
+						usedELCoord2 = landmark2Coord;
 
 						// unusedELEdge = emitterLandmark3Edge;
 						// unusedELCoord = landmark3Coord;
@@ -177,75 +177,72 @@ public class GraphView extends View
 				}
 				else
 				{
-					draw = false;
+					emitterValid = false;
 				}
 			}
 
-			if (draw)
+			if (l1L2Edge != null)
+				canvas.drawLine ((float) landmark1Coord.getX () * scale + offsetX, (float) landmark1Coord.getY () * scale + offsetY,
+						(float) landmark2Coord.getX () * scale + offsetX, (float) landmark2Coord.getY () * scale + offsetY, edgeColor);
+
+			if (l3L1Edge != null)
+				canvas.drawLine ((float) landmark1Coord.getX () * scale + offsetX, (float) landmark1Coord.getY () * scale + offsetY,
+						(float) landmark3Coord.getX () * scale + offsetX, (float) landmark3Coord.getY () * scale + offsetY, edgeColor);
+
+			if (l2L3Edge != null)
+				canvas.drawLine ((float) landmark3Coord.getX () * scale + offsetX, (float) landmark3Coord.getY () * scale + offsetY,
+						(float) landmark2Coord.getX () * scale + offsetX, (float) landmark2Coord.getY () * scale + offsetY, edgeColor);
+
+			canvas.drawCircle ((int) landmark1Coord.getX () * scale + offsetX, (int) landmark1Coord.getY () * scale + offsetY, vertexSize,
+					thisVertexColor);
+			canvas.drawCircle ((int) landmark2Coord.getX () * scale + offsetX, (int) landmark2Coord.getY () * scale + offsetY, vertexSize,
+					vertexColor);
+			canvas.drawCircle ((int) landmark3Coord.getX () * scale + offsetX, (int) landmark3Coord.getY () * scale + offsetY, vertexSize,
+					vertexColor);
+
+			if (emitterSet && emitterValid)
 			{
-				if (l1L2Edge != null)
-					canvas.drawLine ((float) landmark1Coord.getX () * scale + offsetX, (float) landmark1Coord.getY () * scale + offsetY,
-							(float) landmark2Coord.getX () * scale + offsetX, (float) landmark2Coord.getY () * scale + offsetY, edgeColor);
-
-				if (l3L1Edge != null)
-					canvas.drawLine ((float) landmark1Coord.getX () * scale + offsetX, (float) landmark1Coord.getY () * scale + offsetY,
-							(float) landmark3Coord.getX () * scale + offsetX, (float) landmark3Coord.getY () * scale + offsetY, edgeColor);
-
-				if (l2L3Edge != null)
-					canvas.drawLine ((float) landmark3Coord.getX () * scale + offsetX, (float) landmark3Coord.getY () * scale + offsetY,
-							(float) landmark2Coord.getX () * scale + offsetX, (float) landmark2Coord.getY () * scale + offsetY, edgeColor);
-
-				canvas.drawCircle ((int) landmark1Coord.getX () * scale + offsetX, (int) landmark1Coord.getY () * scale + offsetY, vertexSize,
-						thisVertexColor);
-				canvas.drawCircle ((int) landmark2Coord.getX () * scale + offsetX, (int) landmark2Coord.getY () * scale + offsetY, vertexSize,
-						vertexColor);
-				canvas.drawCircle ((int) landmark3Coord.getX () * scale + offsetX, (int) landmark3Coord.getY () * scale + offsetY, vertexSize,
-						vertexColor);
-
-				if (emitterSet)
+				// If there's enough data, there can still be 2 possible locations since emitter
+				// coordinate is based on landmark1 and landmark2. Check that the coordinates
+				// are roughly equal to ensure location accuracy
+				if (numEmitterEdges == numLandmarks)
 				{
-					// If there's enough data, there can still be 2 possible locations since emitter
-					// coordinate is based on landmark1 and landmark2. Check that the coordinates
-					// are roughly equal to ensure location accuracy
-					if (numEdges == numLandmarks)
-					{
-						double actualEmitterL3Dist = Math.abs (Coordinate.distanceBetween (landmark3Coord, emitterPossibles[0]));
-						double estimateLimitEmitterL3 = emitterLandmark3Edge.getWeight () + estimationNoise;
+					double actualEmitterL3Dist = Math.abs (Coordinate.distanceBetween (landmark3Coord, emitterPossibles[0]));
+					double estimateLimitEmitterL3 = emitterLandmark3Edge.getWeight () + estimationNoise;
 
-						if (actualEmitterL3Dist <= estimateLimitEmitterL3) // Coordinate is within
-																			// triangle
-						{
-							canvas.drawCircle ((int) emitterPossibles[0].getX () * scale + offsetX, (int) emitterPossibles[0].getY () * scale
-									+ offsetY, vertexSize, trackingVertexColor);
-						}
-						else
-						// Coordinate is outside triangle
-						{
-							canvas.drawCircle ((int) emitterPossibles[1].getX () * scale + offsetX, (int) emitterPossibles[1].getY () * scale
-									+ offsetY, vertexSize, trackingVertexColor);
-						}
-					}
-					else
+					if (actualEmitterL3Dist <= estimateLimitEmitterL3) // Coordinate is within
+																		// triangle
 					{
-						// Draw both possible points
-
 						canvas.drawCircle ((int) emitterPossibles[0].getX () * scale + offsetX, (int) emitterPossibles[0].getY () * scale + offsetY,
 								vertexSize, trackingVertexColor);
-
+					}
+					else
+					// Coordinate is outside triangle
+					{
 						canvas.drawCircle ((int) emitterPossibles[1].getX () * scale + offsetX, (int) emitterPossibles[1].getY () * scale + offsetY,
 								vertexSize, trackingVertexColor);
-						canvas.drawText ("Not enough data to draw, multiple possible locations", 0f, 0f, blackColor);
 					}
+				}
+				else
+				{
+					// Draw all (both) possible points
+					for (Coordinate c : emitterPossibles)
+					{
+						canvas.drawCircle ((int) c.getX () * scale + offsetX, (int) c.getY () * scale + offsetY, vertexSize, trackingVertexColor);
+					}
+
+					canvas.drawText ("Not enough data to draw, multiple possible locations", 10f, 10f, blackColor);
 				}
 			}
 			else
 			{
-				canvas.drawText ("Not enough data to draw, emitter could be in an infinite number of locations.", 0f, 0f, blackColor);
+				canvas.drawText ("Cannot draw emitter. Emitter is not set or has an infinite number of locations.", 10f, 10f, blackColor);
 			}
 		}
 		catch (Exception e)
 		{
-			canvas.drawText ("Error building graph", 0f, 0f, blackColor);
+			canvas.drawText ("Error building graph", 10f, 10f, blackColor);
+			e.printStackTrace ();
 		}
 	}
 
