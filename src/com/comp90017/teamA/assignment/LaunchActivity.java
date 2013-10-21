@@ -9,7 +9,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
-
+import com.AniFichadia.Toolkit.Utilities.ReceiveData;
+import com.AniFichadia.Toolkit.Utilities.SendData;
 import com.comp90017.teamA.assignment.Emitter.EmitterActivity;
 
 
@@ -38,6 +39,12 @@ public class LaunchActivity extends Activity implements View.OnClickListener
 		switch (v.getId ())
 		{
 			case R.id.emitterButton :
+				// TEMPORARY SEND DATA THROUGH TWITTER
+				//new SendData().execute(new String[] {""});
+				
+				// TEMPORARY RECEIVE DATA THROUGH TWITTER
+				//new ReceiveData().execute(new String[] {""});
+				
 				c = EmitterActivity.class;
 				break;
 			case R.id.listenerButton :

@@ -8,6 +8,12 @@
         android:minSdkVersion="8"
         android:targetSdkVersion="17" />
 
+    <!-- Permission - Internet Connect -->
+    <uses-permission android:name="android.permission.INTERNET" />
+     
+    <!-- Network State Permissions -->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    
     <application
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"

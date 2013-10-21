@@ -8,6 +8,9 @@
 package com.comp90017.teamA.assignment;
 
 public final class R {
+    public static final class array {
+        public static final int pulse_counts=0x7f060000;
+    }
     public static final class attr {
     }
     public static final class dimen {
@@ -24,34 +27,35 @@ public final class R {
         public static final int ic_launcher=0x7f020000;
     }
     public static final class id {
-        public static final int action_settings=0x7f080011;
-        public static final int durLessButton=0x7f080005;
-        public static final int durMoreButton=0x7f080006;
-        public static final int durSeekBar=0x7f080007;
-        public static final int durTV=0x7f080009;
-        public static final int emitterButton=0x7f08000e;
-        public static final int freqLessButton=0x7f080000;
-        public static final int freqMoreButton=0x7f080001;
-        public static final int freqSeekBar=0x7f080002;
-        public static final int freqTV=0x7f080003;
-        public static final int listenerButton=0x7f080010;
-        public static final int playButton=0x7f08000a;
-        public static final int playPulseButton=0x7f08000b;
-        public static final int settingsButton=0x7f08000f;
-        public static final int textView1=0x7f080004;
-        public static final int textView2=0x7f080008;
-        public static final int textView3=0x7f08000d;
-        public static final int timerTV=0x7f08000c;
+        public static final int action_settings=0x7f090013;
+        public static final int durLessButton=0x7f090005;
+        public static final int durMoreButton=0x7f090006;
+        public static final int durSeekBar=0x7f090007;
+        public static final int durTV=0x7f090009;
+        public static final int emitterButton=0x7f090010;
+        public static final int freqLessButton=0x7f090000;
+        public static final int freqMoreButton=0x7f090001;
+        public static final int freqSeekBar=0x7f090002;
+        public static final int freqTV=0x7f090003;
+        public static final int listenerButton=0x7f090012;
+        public static final int playButton=0x7f09000b;
+        public static final int playPulseButton=0x7f09000a;
+        public static final int pulseCountSeekBar=0x7f09000d;
+        public static final int pulseCountTV=0x7f09000f;
+        public static final int settingsButton=0x7f090011;
+        public static final int textView1=0x7f090004;
+        public static final int textView2=0x7f090008;
+        public static final int textView3=0x7f09000e;
+        public static final int timerTV=0x7f09000c;
     }
     public static final class layout {
         public static final int activity_emitter=0x7f030000;
         public static final int activity_launch=0x7f030001;
-        public static final int emitter_view=0x7f030002;
     }
     public static final class menu {
-        public static final int emitter=0x7f070000;
-        public static final int launch=0x7f070001;
-        public static final int main=0x7f070002;
+        public static final int emitter=0x7f080000;
+        public static final int launch=0x7f080001;
+        public static final int main=0x7f080002;
     }
     public static final class string {
         public static final int Play=0x7f050004;
@@ -67,6 +71,7 @@ public final class R {
         public static final int listener=0x7f050009;
         public static final int lt=0x7f05000b;
         public static final int play_pulse=0x7f05000f;
+        public static final int pulse_count=0x7f050012;
         public static final int settings=0x7f05000a;
         public static final int subject_name=0x7f050006;
         public static final int team_members=0x7f050010;
@@ -95,10 +100,10 @@ public final class R {
     
  API 14 theme customizations can go here. 
          */
-        public static final int AppBaseTheme=0x7f060000;
+        public static final int AppBaseTheme=0x7f070000;
         /**  Application theme. 
  All customizations that are NOT specific to a particular API-level can go here. 
          */
-        public static final int AppTheme=0x7f060001;
+        public static final int AppTheme=0x7f070001;
     }
 }
