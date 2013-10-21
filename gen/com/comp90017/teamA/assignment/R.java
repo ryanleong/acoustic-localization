@@ -24,33 +24,42 @@ public final class R {
         public static final int activity_vertical_margin=0x7f040001;
     }
     public static final class drawable {
-        public static final int ic_launcher=0x7f020000;
+        public static final int horizontal=0x7f020000;
+        public static final int ic_launcher=0x7f020001;
+        public static final int vertical=0x7f020002;
     }
     public static final class id {
-        public static final int action_settings=0x7f090013;
+        public static final int action_settings=0x7f090018;
         public static final int durLessButton=0x7f090005;
         public static final int durMoreButton=0x7f090006;
         public static final int durSeekBar=0x7f090007;
         public static final int durTV=0x7f090009;
-        public static final int emitterButton=0x7f090010;
+        public static final int emitterButton=0x7f090011;
         public static final int freqLessButton=0x7f090000;
         public static final int freqMoreButton=0x7f090001;
         public static final int freqSeekBar=0x7f090002;
         public static final int freqTV=0x7f090003;
-        public static final int listenerButton=0x7f090012;
+        public static final int graphTest1=0x7f090010;
+        public static final int image=0x7f090017;
+        public static final int listenerButton=0x7f090013;
         public static final int playButton=0x7f09000b;
         public static final int playPulseButton=0x7f09000a;
         public static final int pulseCountSeekBar=0x7f09000d;
         public static final int pulseCountTV=0x7f09000f;
-        public static final int settingsButton=0x7f090011;
+        public static final int settingsButton=0x7f090012;
         public static final int textView1=0x7f090004;
         public static final int textView2=0x7f090008;
         public static final int textView3=0x7f09000e;
         public static final int timerTV=0x7f09000c;
+        public static final int x_axis=0x7f090014;
+        public static final int y_axis=0x7f090015;
+        public static final int z_axis=0x7f090016;
     }
     public static final class layout {
         public static final int activity_emitter=0x7f030000;
-        public static final int activity_launch=0x7f030001;
+        public static final int activity_graph=0x7f030001;
+        public static final int activity_launch=0x7f030002;
+        public static final int activity_listener=0x7f030003;
     }
     public static final class menu {
         public static final int emitter=0x7f080000;
@@ -76,7 +85,10 @@ public final class R {
         public static final int subject_name=0x7f050006;
         public static final int team_members=0x7f050010;
         public static final int title_activity_emitter=0x7f050011;
+        public static final int title_activity_graph=0x7f050015;
+        public static final int title_activity_graph_test=0x7f050014;
         public static final int title_activity_launch=0x7f050005;
+        public static final int title_activity_listener=0x7f050013;
     }
     public static final class style {
         /** 

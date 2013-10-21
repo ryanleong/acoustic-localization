@@ -27,4 +27,8 @@
         <item name="10">10</item>
     </string-array>
 
+    <string name="title_activity_listener">ListenerActivity</string>
+    <string name="title_activity_graph_test">GraphTest</string>
+    <string name="title_activity_graph">GraphActivity</string>
+
 </resources>

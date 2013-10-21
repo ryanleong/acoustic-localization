@@ -36,6 +36,15 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.comp90017.teamA.assignment.LaunchActivity" />
         </activity>
+        <activity
+            android:name="com.comp90017.teamA.assignment.Listener.ListenerActivity"
+            android:label="@string/title_activity_listener"
+            android:parentActivityName="com.comp90017.teamA.assignment.LaunchActivity" >
+        </activity>
+        <activity
+            android:name="com.comp90017.teamA.assignment.Graph.GraphActivity"
+            android:label="@string/title_activity_graph" >
+        </activity>
     </application>
 
 </manifest>

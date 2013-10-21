@@ -8,6 +8,12 @@
         android:minSdkVersion="8"
         android:targetSdkVersion="17" />
 
+    <!-- Permission - Internet Connect -->
+    <uses-permission android:name="android.permission.INTERNET" />
+     
+    <!-- Network State Permissions -->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    
     <application
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
@@ -29,6 +35,15 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.comp90017.teamA.assignment.LaunchActivity" />
+        </activity>
+        <activity
+            android:name="com.comp90017.teamA.assignment.Listener.ListenerActivity"
+            android:label="@string/title_activity_listener"
+            android:parentActivityName="com.comp90017.teamA.assignment.LaunchActivity" >
+        </activity>
+        <activity
+            android:name="com.comp90017.teamA.assignment.Graph.GraphActivity"
+            android:label="@string/title_activity_graph" >
         </activity>
     </application>
 

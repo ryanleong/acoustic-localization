@@ -30,7 +30,7 @@ public class PulseTimeredTask extends ScheduledTask
 		}
 		catch (Exception e)
 		{
-			e.printStackTrace();
+			e.printStackTrace ();
 		}
 	}
 
