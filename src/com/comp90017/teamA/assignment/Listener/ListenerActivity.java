@@ -9,20 +9,25 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.ImageView;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemSelectedListener;
+import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 import com.comp90017.teamA.assignment.R;
 
 
-public class ListenerActivity extends Activity implements SensorEventListener
+public class ListenerActivity extends Activity implements SensorEventListener, OnItemSelectedListener
 {
 	private float			mLastX, mLastY, mLastZ;
 	private boolean			mInitialized;
 	private SensorManager	mSensorManager;
 	private Sensor			mAccelerometer;
-	private final float		NOISE	= 2f;
+	private final float		NOISE		= 1f;
+
+	private int				listenerID	= 1;
 
 
 	/** Called when the activity is first created. */
@@ -35,6 +40,9 @@ public class ListenerActivity extends Activity implements SensorEventListener
 		mSensorManager = (SensorManager) getSystemService (Context.SENSOR_SERVICE);
 		mAccelerometer = mSensorManager.getDefaultSensor (Sensor.TYPE_ACCELEROMETER);
 		mSensorManager.registerListener (this, mAccelerometer, SensorManager.SENSOR_DELAY_NORMAL);
+
+		Spinner listenerIDSpinner = (Spinner) findViewById (R.id.listener_id_spinner);
+		listenerIDSpinner.setOnItemSelectedListener (this);
 	}
 
 
@@ -65,7 +73,7 @@ public class ListenerActivity extends Activity implements SensorEventListener
 		TextView tvX = (TextView) findViewById (R.id.x_axis);
 		TextView tvY = (TextView) findViewById (R.id.y_axis);
 		TextView tvZ = (TextView) findViewById (R.id.z_axis);
-		ImageView iv = (ImageView) findViewById (R.id.image);
+		// ImageView iv = (ImageView) findViewById (R.id.image);
 		float x = event.values[0];
 		float y = event.values[1];
 		float z = event.values[2];
@@ -96,19 +104,32 @@ public class ListenerActivity extends Activity implements SensorEventListener
 			tvX.setText (Float.toString (deltaX));
 			tvY.setText (Float.toString (deltaY));
 			tvZ.setText (Float.toString (deltaZ));
-			iv.setVisibility (View.VISIBLE);
-			if (deltaX > deltaY)
-			{
-				iv.setImageResource (R.drawable.horizontal);
-			}
-			else if (deltaY > deltaX)
-			{
-				iv.setImageResource (R.drawable.vertical);
-			}
-			else
-			{
-				iv.setVisibility (View.INVISIBLE);
-			}
+			// iv.setVisibility (View.VISIBLE);
+			// if (deltaX > deltaY)
+			// {
+			// iv.setImageResource (R.drawable.horizontal);
+			// }
+			// else if (deltaY > deltaX)
+			// {
+			// iv.setImageResource (R.drawable.vertical);
+			// }
+			// else
+			// {
+			// iv.setVisibility (View.INVISIBLE);
+			// }
 		}
 	}
+
+
+	@ Override
+	public void onItemSelected(AdapterView<?> parent, View view, int pos, long id)
+	{
+		listenerID = Integer.parseInt (parent.getItemAtPosition (pos).toString ());
+		Toast.makeText (getApplicationContext (), "Selected ID: " + listenerID, Toast.LENGTH_SHORT).show ();
+	}
+
+
+	@ Override
+	public void onNothingSelected(AdapterView<?> arg0)
+	{}
 }

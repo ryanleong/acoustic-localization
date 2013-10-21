@@ -26,7 +26,21 @@
         <item name="5">5</item>
         <item name="10">10</item>
     </string-array>
+    <string-array name="listener_ids">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+    </string-array>
 
+    <string name="x_axis">X-Axis</string>
+    <string name="y_axis">Y-Axis</string>
+    <string name="z_axis">z-Axis</string>
+    
+    <string name="listener_id">Listener ID</string>
+    
+    <string name="accelerometer">Accelerometer</string>
+    
+    <string name="listener_id_prompt">Choose a unique ID for your listener</string>
     <string name="title_activity_listener">ListenerActivity</string>
     <string name="title_activity_graph_test">GraphTest</string>
     <string name="title_activity_graph">GraphActivity</string>

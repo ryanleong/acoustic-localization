@@ -9,7 +9,7 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:paddingTop="20dip"
-        android:text="Shaker Demo"
+        android:text="@string/accelerometer"
         android:textSize="16sp"
         android:textStyle="bold" />
 
@@ -25,21 +25,21 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:text="X-Axis"
+                android:text="@string/x_axis"
                 android:textSize="14sp" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:text="Y-Axis"
+                android:text="@string/y_axis"
                 android:textSize="14sp" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:text="Z-Axis"
+                android:text="@string/z_axis"
                 android:textSize="14sp" />
         </TableRow>
 
@@ -65,12 +65,25 @@
         </TableRow>
     </TableLayout>
 
-    <ImageView
-        android:id="@+id/image"
+    <TextView
+        android:id="@+id/textView1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:paddingTop="10dip"
-        android:visibility="invisible" />
+        android:text="@string/listener_id" />
+
+    <Spinner
+        android:id="@+id/listener_id_spinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:entries="@array/listener_ids"
+        android:prompt="@string/listener_id_prompt" />
+
+    <!-- <ImageView -->
+    <!-- android:id="@+id/image" -->
+    <!-- android:layout_width="wrap_content" -->
+    <!-- android:layout_height="wrap_content" -->
+    <!-- android:layout_gravity="center" -->
+    <!-- android:paddingTop="10dip" -->
+    <!-- android:visibility="invisible" /> -->
 
 </LinearLayout>
