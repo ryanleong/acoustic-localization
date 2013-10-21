@@ -9,9 +9,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
-
 import com.AniFichadia.Toolkit.Utilities.ReceiveData;
 import com.AniFichadia.Toolkit.Utilities.SendData;
+import com.AniFichadia.Toolkit.Utilities.SoundMeter;
 import com.comp90017.teamA.assignment.Emitter.EmitterActivity;
 import com.comp90017.teamA.assignment.Graph.GraphActivity;
 import com.comp90017.teamA.assignment.Listener.ListenerActivity;
@@ -48,6 +48,18 @@ public class LaunchActivity extends Activity implements View.OnClickListener
 				// TEMPORARY RECEIVE DATA THROUGH TWITTER
 				//new ReceiveData ().execute ();
 
+				// TEMPORARY: GET AUDIO AMPLITTUDE
+//				SoundMeter xMeter = new SoundMeter();
+//				xMeter.execute();
+//				
+//				try {
+//					Thread.sleep(2000);
+//				} catch (InterruptedException e) {
+//					// TODO Auto-generated catch block
+//					e.printStackTrace();
+//				}
+//				xMeter.stop();
+//				
 				c = EmitterActivity.class;
 				break;
 			case R.id.listenerButton :
