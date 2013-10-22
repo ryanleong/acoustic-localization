@@ -48,6 +48,10 @@ public class ListenerActivity extends Activity implements SensorEventListener, O
 
 	private GraphView		gv;
 
+	private double			accelX		= 0;
+	private double			accelY		= 0;
+	private double			accelZ		= 0;
+
 	public static ArrayList<Double> dbReading;
 	public static boolean isListening = false;
 
@@ -55,9 +59,9 @@ public class ListenerActivity extends Activity implements SensorEventListener, O
 	@ Override
 	public void onCreate(Bundle savedInstanceState)
 	{
-		Intent intent = getIntent();
-		MyParcelable data = intent.getParcelableExtra("DATA");
-		
+		Intent intent = getIntent ();
+		MyParcelable data = intent.getParcelableExtra ("DATA");
+
 		super.onCreate (savedInstanceState);
 		setContentView (R.layout.activity_listener);
 		mInitialized = false;
@@ -74,8 +78,21 @@ public class ListenerActivity extends Activity implements SensorEventListener, O
 	}
 
 
+	public boolean isStationary()
+	{
+		return (accelX == 0 && accelY == 0 && accelZ == 0);
+	}
+
+
 	public void setupListeners()
 	{
+		if ( !isStationary ())
+		{
+			Toast.makeText (getApplicationContext (), "Landmark not stationary. Listening can only occur with stationary landmarks",
+					Toast.LENGTH_LONG).show ();
+			return;
+		}
+
 		// TODO Start listener thread or whatever to capture other listeners pulses
 		generateTone ();
 		long scheduledEmit = listenerID * 3 * 1000;
@@ -102,11 +119,20 @@ public class ListenerActivity extends Activity implements SensorEventListener, O
 			public void undoTask(Object... params)
 			{}
 		});
+
+		t.startTimer ();
 	}
 
 
 	public void trackEmitter()
 	{
+		if ( !isStationary ())
+		{
+			Toast.makeText (getApplicationContext (), "Landmark not stationary. Listening can only occur with stationary landmarks",
+					Toast.LENGTH_LONG).show ();
+			return;
+		}
+
 		// start up listener thread.
 		// when audio peaks levels hit the apex of its amplitude, save/store/relay amplitude and
 		// calculate distance.
@@ -183,9 +209,15 @@ public class ListenerActivity extends Activity implements SensorEventListener, O
 			mLastX = x;
 			mLastY = y;
 			mLastZ = z;
+
 			tvX.setText (Float.toString (deltaX));
 			tvY.setText (Float.toString (deltaY));
 			tvZ.setText (Float.toString (deltaZ));
+
+			accelX = deltaX;
+			accelY = deltaY;
+			accelZ = deltaZ;
+
 			// iv.setVisibility (View.VISIBLE);
 			// if (deltaX > deltaY)
 			// {

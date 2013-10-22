@@ -17,14 +17,16 @@ import com.comp90017.teamA.assignment.Listener.ListenerActivity;
 
 public class LaunchActivity extends Activity implements View.OnClickListener
 {
-	protected MyParcelable data;
+	protected MyParcelable	data;
+
+
 	@ Override
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate (savedInstanceState);
-		
-		data = new MyParcelable(null);
-		
+
+		data = new MyParcelable (null);
+
 		setContentView (R.layout.activity_launch);
 		Button emitterButton = (Button) findViewById (R.id.emitterButton);
 		Button listenerButton = (Button) findViewById (R.id.listenerButton);
@@ -75,11 +77,12 @@ public class LaunchActivity extends Activity implements View.OnClickListener
 				break;
 		}
 
-		if (c != null){
-			i = new Intent(getApplicationContext(), c);
-			i.putExtra("DATA", data);
-			startActivityForResult ( i, 1 );
-			//startActivity (new Intent (getApplicationContext (), c));
+		if (c != null)
+		{
+			i = new Intent (getApplicationContext (), c);
+			i.putExtra ("DATA", data);
+			startActivityForResult (i, 1);
+			// startActivity (new Intent (getApplicationContext (), c));
 		}
 		else
 			Toast.makeText (getApplicationContext (), "Feature not available", Toast.LENGTH_LONG).show ();
