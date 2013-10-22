@@ -18,6 +18,9 @@ package com.AniFichadia.Toolkit.Utilities;
 
 
 import java.io.IOException;
+import java.util.ArrayList;
+
+import com.comp90017.teamA.assignment.Listener.ListenerActivity;
 
 import android.media.MediaRecorder;
 import android.os.AsyncTask;
@@ -78,16 +81,24 @@ public class SoundMeter extends AsyncTask<String, Void, String> {
 		@Override
 		protected String doInBackground(String... params) {
 			
-			start();
+			ListenerActivity.dbReading = new ArrayList<Double>();
 			
+			start();
+			long startTime = System.currentTimeMillis();
+			 
+
 			while(keepRunning) {
 				double amp = getAmplitude();
 				if (amp > 0.0) {
-					System.out.println(amp);
+					ListenerActivity.dbReading.add(amp);
+					//System.out.println(amp);
 				}
 				
+				if ((System.currentTimeMillis() - 1000 > startTime) ) {
+					stop();
+					ListenerActivity.isListening = false;
+				}
 			}
-			
 			return null;
 		}
 }

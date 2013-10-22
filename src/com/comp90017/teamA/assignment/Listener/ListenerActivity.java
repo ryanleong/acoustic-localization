@@ -1,6 +1,9 @@
 package com.comp90017.teamA.assignment.Listener;
 
 
+import java.util.ArrayList;
+
+import android.R.integer;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -17,9 +20,9 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-
 import com.AniFichadia.AniFichadiaToolkitAndroid.Timing.ScheduledTask;
 import com.AniFichadia.AniFichadiaToolkitAndroid.Timing.TaskedTimer;
+import com.AniFichadia.Toolkit.Utilities.SoundMeter;
 import com.comp90017.teamA.assignment.MyParcelable;
 import com.comp90017.teamA.assignment.R;
 import com.comp90017.teamA.assignment.Emitter.PulseTimeredTask;
@@ -45,6 +48,8 @@ public class ListenerActivity extends Activity implements SensorEventListener, O
 
 	private GraphView		gv;
 
+	public static ArrayList<Double> dbReading;
+	public static boolean isListening = false;
 
 	/** Called when the activity is first created. */
 	@ Override
@@ -64,6 +69,8 @@ public class ListenerActivity extends Activity implements SensorEventListener, O
 		listenerIDSpinner.setOnItemSelectedListener (this);
 
 		gv = (GraphView) findViewById (R.id.testGraphView);
+		
+		trackEmitter();
 	}
 
 
