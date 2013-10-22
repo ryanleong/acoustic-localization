@@ -79,6 +79,13 @@
         android:prompt="@string/listener_id_prompt" />
 
     <Button
+        android:id="@+id/setupBtn"
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Setup" />
+
+    <Button
         android:id="@+id/TrackEmitterBtn"
         style="?android:attr/buttonStyleSmall"
         android:layout_width="wrap_content"

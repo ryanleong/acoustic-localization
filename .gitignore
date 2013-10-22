@@ -1,2 +1,3 @@
+*.class
 bin/
 src/org/jgrapht/util/package.html

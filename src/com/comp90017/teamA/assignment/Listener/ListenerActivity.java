@@ -76,8 +76,11 @@ public class ListenerActivity extends Activity implements SensorEventListener,
 		
 		Button trackEmitterButton = (Button) findViewById(R.id.TrackEmitterBtn);
 		Button queryButton = (Button) findViewById(R.id.queryBtn);
+		Button setupButton = (Button) findViewById(R.id.setupBtn);
+		
 		trackEmitterButton.setOnClickListener(this);
 		queryButton.setOnClickListener(this);
+		setupButton.setOnClickListener(this);
 
 		gv = (GraphView) findViewById(R.id.testGraphView);
 
@@ -88,6 +91,10 @@ public class ListenerActivity extends Activity implements SensorEventListener,
 	public void onClick(View v) {
 		
 		switch (v.getId()) {
+		case R.id.setupBtn:
+			Toast.makeText (getApplicationContext (), "Setting up landmarks...", Toast.LENGTH_LONG).show ();
+			setupListeners();
+			break;
 		case R.id.TrackEmitterBtn :
 				Toast.makeText (getApplicationContext (), "Tracking Emitter...", Toast.LENGTH_LONG).show ();
 				trackEmitter();
