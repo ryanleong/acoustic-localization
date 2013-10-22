@@ -47,24 +47,6 @@ public class LaunchActivity extends Activity implements View.OnClickListener
 		switch (v.getId ())
 		{
 			case R.id.emitterButton :
-				// TEMPORARY SEND DATA THROUGH TWITTER
-				// new SendData ().execute ("data to send");
-
-				// TEMPORARY RECEIVE DATA THROUGH TWITTER
-				// new ReceiveData ().execute ();
-
-				// TEMPORARY: GET AUDIO AMPLITTUDE
-				// SoundMeter xMeter = new SoundMeter();
-				// xMeter.execute();
-				//
-				// try {
-				// Thread.sleep(2000);
-				// } catch (InterruptedException e) {
-				// // TODO Auto-generated catch block
-				// e.printStackTrace();
-				// }
-				// xMeter.stop();
-				//
 				c = EmitterActivity.class;
 				break;
 			case R.id.listenerButton :

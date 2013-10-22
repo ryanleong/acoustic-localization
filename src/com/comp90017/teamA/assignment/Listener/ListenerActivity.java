@@ -3,6 +3,7 @@ package com.comp90017.teamA.assignment.Listener;
 import java.util.ArrayList;
 import java.util.Date;
 
+import android.R.bool;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -55,6 +56,10 @@ public class ListenerActivity extends Activity implements SensorEventListener,
 
 	public static double maxDB = -10000;
 	private String sessionID;
+	private int numOfPulses = 3;
+	
+	// Used for keeping order of setup
+	int step = 1;
 
 	/** Called when the activity is first created. */
 	@Override
@@ -76,12 +81,14 @@ public class ListenerActivity extends Activity implements SensorEventListener,
 		
 		Button trackEmitterButton = (Button) findViewById(R.id.TrackEmitterBtn);
 		Button queryButton = (Button) findViewById(R.id.queryBtn);
-		Button setupButton = (Button) findViewById(R.id.setupBtn);
+		Button setupEmitButton = (Button) findViewById(R.id.setupEmitBtn);
+		Button setupReceiveButton = (Button) findViewById(R.id.setupReceiveBtn);
 		
 		trackEmitterButton.setOnClickListener(this);
 		queryButton.setOnClickListener(this);
-		setupButton.setOnClickListener(this);
-
+		setupEmitButton.setOnClickListener(this);
+		setupReceiveButton.setOnClickListener(this);
+		
 		gv = (GraphView) findViewById(R.id.testGraphView);
 
 		// TO be placed in setupListeners()
@@ -91,9 +98,14 @@ public class ListenerActivity extends Activity implements SensorEventListener,
 	public void onClick(View v) {
 		
 		switch (v.getId()) {
-		case R.id.setupBtn:
-			Toast.makeText (getApplicationContext (), "Setting up landmarks...", Toast.LENGTH_LONG).show ();
+		case R.id.setupEmitBtn:
+			//Toast.makeText (getApplicationContext (), "Starting setup...", Toast.LENGTH_LONG).show ();
 			setupListeners();
+			break;
+		
+		case R.id.setupReceiveBtn:
+			Toast.makeText (getApplicationContext (), "Receiving energy signal...", Toast.LENGTH_LONG).show ();
+
 			break;
 		case R.id.TrackEmitterBtn :
 				Toast.makeText (getApplicationContext (), "Tracking Emitter...", Toast.LENGTH_LONG).show ();
@@ -115,6 +127,36 @@ public class ListenerActivity extends Activity implements SensorEventListener,
 	}
 
 	public void setupListeners() {
+
+		switch (listenerID) {
+		case 1:
+			step = 1;
+			
+			Toast.makeText (getApplicationContext (), "Step 1", Toast.LENGTH_LONG).show ();
+			emit();
+
+			break;
+
+		case 2: 
+			step = 1;
+			
+			Toast.makeText (getApplicationContext (), "Step 1", Toast.LENGTH_LONG).show ();
+			receive();
+			break;
+		
+		case 3:
+			step = 1;
+			
+			Toast.makeText (getApplicationContext (), "Step 1", Toast.LENGTH_LONG).show ();
+			receive();
+			break;
+		default:
+			break;
+		}
+
+	}
+	
+	private void emit() {
 		if (!isStationary()) {
 			Toast.makeText(
 					getApplicationContext(),
@@ -125,30 +167,99 @@ public class ListenerActivity extends Activity implements SensorEventListener,
 
 		// TODO Start listener thread or whatever to capture other listeners
 		// pulses
-		generateTone();
-		long scheduledEmit = listenerID * 3 * 1000;
+		generateTone ();
 		final TaskedTimer t = new TaskedTimer(null);
 
-		// TODO schedule task to stop listener before emitting?
+		// Schedule sound to occur straight away
+		t.addTask (0, new PulseTimeredTask (generatedSnd, sampleRate));
+		
+		// Schedule sound to pulse (occur periodically).
+		t.addPeriodicTask ((long) (duration * 2 * 1000), new PulseTimeredTask (generatedSnd, sampleRate));
+		
+		// Schedule task to stop the timer.
+		t.addTask ((long) ((numOfPulses - 1) * duration * 2 * 1000), new ScheduledTask () {
+			private static final long	serialVersionUID	= 1L;
 
-		// Schedule sound to occur
-		t.addTask(scheduledEmit, new PulseTimeredTask(generatedSnd, sampleRate));
-		// Schedule Timer termination
-		t.addTask(scheduledEmit, new ScheduledTask() {
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			public void doTask(Object... params) {
-				t.stopTimer();
-				// TODO: restart listener?
+			@ Override
+			public void doTask(Object... params)
+			{
+				t.stopTimer ();
+				
+				if (step <= 3) {
+					step++;
+					
+					switch (listenerID) {
+					case 1:
+						Toast.makeText (getApplicationContext (), "Step 2", Toast.LENGTH_LONG).show ();
+						receive();
+						
+						break;
+					case 2:
+						Toast.makeText (getApplicationContext (), "Step 3", Toast.LENGTH_LONG).show ();
+						receive();
+						
+						break;
+						
+					default:
+						break;
+					}
+				}
 			}
 
-			@Override
-			public void undoTask(Object... params) {
-			}
 		});
 
-		t.startTimer();
+		t.startTimer ();
+	}
+	
+	public void receive() {
+		// Reset value
+		maxDB = -10000;
+		
+		final TaskedTimer tt = new TaskedTimer(null);
+		
+		tt.addTask(0, new SoundMeterTask(10 * 1000));
+		tt.startTimer();
+		
+		tt.addTask(10 * 1000, new ScheduledTask() {
+			
+			@Override
+			public void doTask(Object... arg0) {
+				tt.stopTimer();
+				
+				if (step <= 3) {
+					step++;
+					
+					switch (listenerID) {
+					case 1:
+						Toast.makeText (getApplicationContext (), "Step 3", Toast.LENGTH_LONG).show ();
+						receive();
+						
+						break;
+					case 2:
+						Toast.makeText (getApplicationContext (), "Step 2", Toast.LENGTH_LONG).show ();
+						emit();
+						
+						break;
+						
+					case 3:
+						
+						if (step == 2) {
+							Toast.makeText (getApplicationContext (), "Step 2", Toast.LENGTH_LONG).show ();
+							receive();
+						}
+						else {
+							Toast.makeText (getApplicationContext (), "Step 3", Toast.LENGTH_LONG).show ();
+							emit();
+						}
+
+						break;
+					default:
+						break;
+					}
+				}
+			};
+		});
+		
 	}
 
 	public void trackEmitter() {
@@ -159,7 +270,10 @@ public class ListenerActivity extends Activity implements SensorEventListener,
 					Toast.LENGTH_LONG).show();
 			return;
 		}
+		
+		// Reset Graph
 		gv.resetGraph();
+		maxDB = -10000;
 
 		// start up listener thread.
 		final TaskedTimer tt = new TaskedTimer(null);
@@ -192,7 +306,6 @@ public class ListenerActivity extends Activity implements SensorEventListener,
 							protected void onPostExecute(String result) {
 								// TODO Auto-generated method stub
 								super.onPostExecute(result);
-								int count = 0, max = 2;
 
 								ArrayList<String> landmarks = new ArrayList<String>();
 								
@@ -224,26 +337,25 @@ public class ListenerActivity extends Activity implements SensorEventListener,
 									String[] feedData = temp2.split(",");
 									
 									// Check if in this session
-									if (!feedData[3].equals(sessionID)) {
+									if (!feedData[4].equals(sessionID)) {
 										continue;
 									}
 									
 									Log.d("Received", temp2);
-									Log.d("ID", feedData[0]);
 									
-									if (feedData[0].equals("1")) {
-										gv.addEmitterEdge(landmarks.get(Integer.parseInt(feedData[0])-1), 
-												Double.parseDouble(feedData[1]) * 10);
+									if (feedData[1].equals("1")) {
+										gv.addEmitterEdge(landmarks.get(Integer.parseInt(feedData[1])-1), 
+												Double.parseDouble(feedData[2]) * 10);
 										isFound[0] = true;
 									}
-									else if (feedData[0].equals("2")) {
-										gv.addEmitterEdge(landmarks.get(Integer.parseInt(feedData[0])-1), 
-												Double.parseDouble(feedData[1]) * 10);
+									else if (feedData[1].equals("2")) {
+										gv.addEmitterEdge(landmarks.get(Integer.parseInt(feedData[1])-1), 
+												Double.parseDouble(feedData[2]) * 10);
 										isFound[1] = true;
 									}
 									else {
-										gv.addEmitterEdge(landmarks.get(Integer.parseInt(feedData[0])-1), 
-												Double.parseDouble(feedData[1]) * 10);
+										gv.addEmitterEdge(landmarks.get(Integer.parseInt(feedData[1])-1), 
+												Double.parseDouble(feedData[2]) * 10);
 										isFound[2] = true;
 									}
 
@@ -252,12 +364,8 @@ public class ListenerActivity extends Activity implements SensorEventListener,
 										if (isFound[i] == false ) {
 											allFound = false;
 										}
-										
-										Log.d("Data Found", isFound[i]+ "");
 									}
 								}
-								
-								
 							}
 						};
 						
@@ -274,7 +382,7 @@ public class ListenerActivity extends Activity implements SensorEventListener,
 				};
 				
 				// Send data to server
-				sendData.execute(listenerID + "," + distance + ","
+				sendData.execute("track," + listenerID + "," + distance + ","
 						+ System.currentTimeMillis() + "," + sessionID);
 				
 
@@ -300,7 +408,6 @@ public class ListenerActivity extends Activity implements SensorEventListener,
 			protected void onPostExecute(String result) {
 				// TODO Auto-generated method stub
 				super.onPostExecute(result);
-				int count = 0, max = 2;
 
 				ArrayList<String> landmarks = new ArrayList<String>();
 				
@@ -318,31 +425,39 @@ public class ListenerActivity extends Activity implements SensorEventListener,
 					// Creation DateTime of Data
 					Date createdDate = status.getCreatedAt();
 
+//					// Check that data is at most 3 minutes old
+//					if (createdDate.getDate() == now.getDate() &&
+//						createdDate.getHours() == now.getHours() &&
+//						(now.getMinutes() - createdDate.getMinutes()) > 3) {
+//						
+//						Log.d("Twitter Feed", "Data created at " + createdDate.toString() + 
+//								" is too old to be used");
+//						continue;
+//					}
 					
 					String temp2 = status.getText();
 					String[] feedData = temp2.split(",");
 					
 					// Check if in this session
-					if (!feedData[3].equals(sessionID)) {
+					if (!feedData[4].equals(sessionID)) {
 						continue;
 					}
 					
 					Log.d("Received", temp2);
-					Log.d("ID", feedData[0]);
 					
-					if (feedData[0].equals("1")) {
-						gv.addEmitterEdge(landmarks.get(Integer.parseInt(feedData[0])-1), 
-								Double.parseDouble(feedData[1]) * 10);
+					if (feedData[1].equals("1")) {
+						gv.addEmitterEdge(landmarks.get(Integer.parseInt(feedData[1])-1), 
+								Double.parseDouble(feedData[2]) * 10);
 						isFound[0] = true;
 					}
-					else if (feedData[0].equals("2")) {
-						gv.addEmitterEdge(landmarks.get(Integer.parseInt(feedData[0])-1), 
-								Double.parseDouble(feedData[1]) * 10);
+					else if (feedData[1].equals("2")) {
+						gv.addEmitterEdge(landmarks.get(Integer.parseInt(feedData[1])-1), 
+								Double.parseDouble(feedData[2]) * 10);
 						isFound[1] = true;
 					}
 					else {
-						gv.addEmitterEdge(landmarks.get(Integer.parseInt(feedData[0])-1), 
-								Double.parseDouble(feedData[1]) * 10);
+						gv.addEmitterEdge(landmarks.get(Integer.parseInt(feedData[1])-1), 
+								Double.parseDouble(feedData[2]) * 10);
 						isFound[2] = true;
 					}
 
@@ -351,16 +466,7 @@ public class ListenerActivity extends Activity implements SensorEventListener,
 						if (isFound[i] == false ) {
 							allFound = false;
 						}
-						
-						Log.d("Data Found", isFound[i]+ "");
 					}
-					
-					gv.addLandmarkEdge (GraphView.landmark1, GraphView.landmark2, 2 * 10);
-					gv.addLandmarkEdge (GraphView.landmark2, GraphView.landmark3, 2 * 10);
-					gv.addLandmarkEdge (GraphView.landmark3, GraphView.landmark1, 2 * 10);
-
-
-					gv.invalidate ();
 				}
 				
 				
