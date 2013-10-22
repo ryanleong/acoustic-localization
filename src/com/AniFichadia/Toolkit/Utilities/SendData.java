@@ -25,11 +25,9 @@ public class SendData extends AsyncTask<String, Void, String>
 		{
 
 			// Data format
-			// ID,Time,Data
+			// ID,Data,Time
 
-			String tweetDataString = "ID," + System.currentTimeMillis () + "," + params[0];
-
-			twitter4j.Status status = twitter.updateStatus (tweetDataString);
+			twitter4j.Status status = twitter.updateStatus (params[0]);
 
 			System.out.println ("Successfully updated the status to [" + status.getText () + "].");
 		}
@@ -41,5 +39,9 @@ public class SendData extends AsyncTask<String, Void, String>
 
 		return "";
 	}
-
+	
+	@ Override
+	protected void onPostExecute(String result) {
+		
+	}
 }

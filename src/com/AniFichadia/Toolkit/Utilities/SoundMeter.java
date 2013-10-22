@@ -18,19 +18,21 @@ package com.AniFichadia.Toolkit.Utilities;
 
 
 import java.io.IOException;
-import java.util.ArrayList;
-
-import com.comp90017.teamA.assignment.Listener.ListenerActivity;
 
 import android.media.MediaRecorder;
 import android.os.AsyncTask;
 
-public class SoundMeter extends AsyncTask<String, Void, String> {
+import com.comp90017.teamA.assignment.Listener.ListenerActivity;
+
+
+public class SoundMeter extends AsyncTask<Integer, Void, String> {
         static final private double EMA_FILTER = 0.6;
 
         private MediaRecorder mRecorder = null;
         private double mEMA = 0.0;
         private Boolean keepRunning = true;
+        
+        private int duration = 1000;
 
         public void start() {
                 if (mRecorder == null) {
@@ -65,7 +67,7 @@ public class SoundMeter extends AsyncTask<String, Void, String> {
         
         public double getAmplitude() {
                 if (mRecorder != null) {
-                        return  (mRecorder.getMaxAmplitude()/2700.0);
+                        return  (mRecorder.getMaxAmplitude());
                 }
                 else
                         return 0;
@@ -79,26 +81,35 @@ public class SoundMeter extends AsyncTask<String, Void, String> {
         }
 
 		@Override
-		protected String doInBackground(String... params) {
+		protected String doInBackground(Integer... params) {
 			
-			ListenerActivity.dbReading = new ArrayList<Double>();
+			if (params.length > 0) {
+				duration = params[0];
+			}
 			
 			start();
 			long startTime = System.currentTimeMillis();
-			 
-
+			
 			while(keepRunning) {
 				double amp = getAmplitude();
+				
+				
 				if (amp > 0.0) {
-					ListenerActivity.dbReading.add(amp);
-					//System.out.println(amp);
+					
+					double db = 20 * Math.log10(amp/32767.0);
+					
+					if(ListenerActivity.maxDB < db) {
+						ListenerActivity.maxDB = db;
+					}
 				}
 				
-				if ((System.currentTimeMillis() - 1000 > startTime) ) {
+				if ((System.currentTimeMillis() - duration > startTime) ) {
+					System.out.println(ListenerActivity.maxDB);
 					stop();
-					ListenerActivity.isListening = false;
 				}
 			}
 			return null;
 		}
 }
+
+

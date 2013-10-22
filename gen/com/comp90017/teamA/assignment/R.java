@@ -30,7 +30,8 @@ public final class R {
         public static final int vertical=0x7f020002;
     }
     public static final class id {
-        public static final int action_settings=0x7f090018;
+        public static final int TrackEmitterBtn=0x7f090018;
+        public static final int action_settings=0x7f09001a;
         public static final int durLessButton=0x7f090005;
         public static final int durMoreButton=0x7f090006;
         public static final int durSeekBar=0x7f090007;
@@ -47,6 +48,7 @@ public final class R {
         public static final int playPulseButton=0x7f09000a;
         public static final int pulseCountSeekBar=0x7f09000d;
         public static final int pulseCountTV=0x7f09000f;
+        public static final int queryBtn=0x7f090019;
         public static final int testGraphView=0x7f090010;
         public static final int textView1=0x7f090004;
         public static final int textView2=0x7f090008;

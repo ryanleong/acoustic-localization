@@ -1,6 +1,5 @@
 package com.AniFichadia.Toolkit.Utilities;
 
-
 import twitter4j.Query;
 import twitter4j.QueryResult;
 import twitter4j.Twitter;
@@ -12,7 +11,8 @@ import android.os.AsyncTask;
 
 public class ReceiveData extends AsyncTask<String, Void, String>
 {
-
+	protected QueryResult feed;
+	
 	@ Override
 	protected String doInBackground(String... params)
 	{
@@ -24,34 +24,22 @@ public class ReceiveData extends AsyncTask<String, Void, String>
 		TwitterFactory tf = new TwitterFactory (cb.build ());
 		Twitter twitter = tf.getInstance ();
 
-		String feed = "";
-
-		try
-		{
+		try {
 
 			Query query = new Query ("from:AcousticLocal");
-			QueryResult result = twitter.search (query);
-
-			for (twitter4j.Status status : result.getTweets ())
-			{
-
-				feed += "@" + status.getUser ().getScreenName () + ": " + status.getText () + "\n";
-			}
-
+			feed = twitter.search (query);
+			
 		}
-		catch (TwitterException e)
-		{
+		catch (TwitterException e) {
 			e.printStackTrace ();
 		}
-		System.out.println ("Feed: " + feed);
-		return feed;
+		
+		return "";
 	}
 
 
 	@ Override
-	protected void onPostExecute(String result)
-	{
-		System.out.println ("Received Data: " + result);
-		// MainActivity.twitterFeed.setText(result);
+	protected void onPostExecute(String result) {
+		
 	}
 }
