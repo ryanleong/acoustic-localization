@@ -21,6 +21,7 @@ import java.io.IOException;
 
 import android.media.MediaRecorder;
 import android.os.AsyncTask;
+import android.util.Log;
 
 import com.comp90017.teamA.assignment.Listener.ListenerActivity;
 
@@ -93,13 +94,13 @@ public class SoundMeter extends AsyncTask<Integer, Void, String> {
 			while(keepRunning) {
 				double amp = getAmplitude();
 				
-				
 				if (amp > 0.0) {
 					
 					double db = 20 * Math.log10(amp/32767.0);
 					
 					if(ListenerActivity.maxDB < db) {
 						ListenerActivity.maxDB = db;
+						
 					}
 				}
 				

@@ -3,7 +3,7 @@ package com.comp90017.teamA.assignment.Listener;
 import java.util.ArrayList;
 import java.util.Date;
 
-import android.R.bool;
+import android.R.integer;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -26,6 +26,7 @@ import com.AniFichadia.AniFichadiaToolkitAndroid.Timing.ScheduledTask;
 import com.AniFichadia.AniFichadiaToolkitAndroid.Timing.TaskedTimer;
 import com.AniFichadia.Toolkit.Utilities.ReceiveData;
 import com.AniFichadia.Toolkit.Utilities.SendData;
+import com.AniFichadia.Toolkit.Utilities.SoundMeter;
 import com.comp90017.teamA.assignment.MyParcelable;
 import com.comp90017.teamA.assignment.R;
 import com.comp90017.teamA.assignment.Emitter.PulseTimeredTask;
@@ -42,7 +43,7 @@ public class ListenerActivity extends Activity implements SensorEventListener,
 
 	private int listenerID = 1;
 
-	private double duration = 1.0; // seconds
+	private double duration = 2.0; // seconds
 	private final int sampleRate = 44100;
 	private double freq = 1000; // hz
 
@@ -59,8 +60,11 @@ public class ListenerActivity extends Activity implements SensorEventListener,
 	private int numOfPulses = 3;
 	
 	// Used for keeping order of setup
-	int step = 1;
+	TaskedTimer t;
+	int step = 0;
+	private ArrayList<Double> sensorDistances = new ArrayList<Double>();
 
+	
 	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -92,7 +96,7 @@ public class ListenerActivity extends Activity implements SensorEventListener,
 		gv = (GraphView) findViewById(R.id.testGraphView);
 
 		// TO be placed in setupListeners()
-		sessionID = "123"; //Math.random() + "";
+		sessionID = "grkperjop"; //Math.random() + "";
 	}
 	
 	public void onClick(View v) {
@@ -100,11 +104,12 @@ public class ListenerActivity extends Activity implements SensorEventListener,
 		switch (v.getId()) {
 		case R.id.setupEmitBtn:
 			//Toast.makeText (getApplicationContext (), "Starting setup...", Toast.LENGTH_LONG).show ();
+			//setupListeners();
 			setupListeners();
 			break;
 		
 		case R.id.setupReceiveBtn:
-			Toast.makeText (getApplicationContext (), "Receiving energy signal...", Toast.LENGTH_LONG).show ();
+			Toast.makeText (getApplicationContext (), "Current does nothing.", Toast.LENGTH_LONG).show ();
 
 			break;
 		case R.id.TrackEmitterBtn :
@@ -126,142 +131,244 @@ public class ListenerActivity extends Activity implements SensorEventListener,
 		return (accelX == 0 && accelY == 0 && accelZ == 0);
 	}
 
-	public void setupListeners() {
 
+	public void setupListeners() {
+		t = new TaskedTimer(null);
+		generateTone();
+		
 		switch (listenerID) {
 		case 1:
-			step = 1;
-			
-			Toast.makeText (getApplicationContext (), "Step 1", Toast.LENGTH_LONG).show ();
-			emit();
-
+			queueEmit(0);
+			queueReceive(3);
+			queueReceive(6);
 			break;
 
 		case 2: 
-			step = 1;
-			
-			Toast.makeText (getApplicationContext (), "Step 1", Toast.LENGTH_LONG).show ();
-			receive();
+			queueReceive(0);
+			queueEmit(3);
+			queueReceive(6);
 			break;
 		
 		case 3:
-			step = 1;
-			
-			Toast.makeText (getApplicationContext (), "Step 1", Toast.LENGTH_LONG).show ();
-			receive();
+			queueReceive(0);
+			queueReceive(3);
+			queueEmit(6);
 			break;
 		default:
 			break;
 		}
 
+		t.startTimer();
 	}
 	
-	private void emit() {
-		if (!isStationary()) {
-			Toast.makeText(
-					getApplicationContext(),
-					"Landmark not stationary. Listening can only occur with stationary landmarks",
-					Toast.LENGTH_LONG).show();
-			return;
-		}
-
-		// TODO Start listener thread or whatever to capture other listeners
-		// pulses
-		generateTone ();
-		final TaskedTimer t = new TaskedTimer(null);
-
-		// Schedule sound to occur straight away
-		t.addTask (0, new PulseTimeredTask (generatedSnd, sampleRate));
+	private void queueReceive(int startTime) {
 		
-		// Schedule sound to pulse (occur periodically).
-		t.addPeriodicTask ((long) (duration * 2 * 1000), new PulseTimeredTask (generatedSnd, sampleRate));
-		
-		// Schedule task to stop the timer.
-		t.addTask ((long) ((numOfPulses - 1) * duration * 2 * 1000), new ScheduledTask () {
-			private static final long	serialVersionUID	= 1L;
-
-			@ Override
-			public void doTask(Object... params)
-			{
-				t.stopTimer ();
-				
-				if (step <= 3) {
-					step++;
-					
-					switch (listenerID) {
-					case 1:
-						Toast.makeText (getApplicationContext (), "Step 2", Toast.LENGTH_LONG).show ();
-						receive();
-						
-						break;
-					case 2:
-						Toast.makeText (getApplicationContext (), "Step 3", Toast.LENGTH_LONG).show ();
-						receive();
-						
-						break;
-						
-					default:
-						break;
-					}
-				}
-			}
-
-		});
-
-		t.startTimer ();
-	}
-	
-	public void receive() {
-		// Reset value
-		maxDB = -10000;
-		
-		final TaskedTimer tt = new TaskedTimer(null);
-		
-		tt.addTask(0, new SoundMeterTask(10 * 1000));
-		tt.startTimer();
-		
-		tt.addTask(10 * 1000, new ScheduledTask() {
+		t.addTask((long) (startTime * 1000), new ScheduledTask() {
 			
 			@Override
 			public void doTask(Object... arg0) {
-				tt.stopTimer();
-				
-				if (step <= 3) {
-					step++;
+				SoundMeter sm = new SoundMeter() {
 					
-					switch (listenerID) {
-					case 1:
-						Toast.makeText (getApplicationContext (), "Step 3", Toast.LENGTH_LONG).show ();
-						receive();
+					@Override
+					protected void onPostExecute(String result) {
+						super.onPostExecute(result);
 						
-						break;
-					case 2:
-						Toast.makeText (getApplicationContext (), "Step 2", Toast.LENGTH_LONG).show ();
-						emit();
+						// Calculate Distance based on Signal Strength
+						sensorDistances.add(new DistanceEstimator().calculateDistance(maxDB, 1000));
 						
-						break;
-						
-					case 3:
-						
-						if (step == 2) {
-							Toast.makeText (getApplicationContext (), "Step 2", Toast.LENGTH_LONG).show ();
-							receive();
-						}
-						else {
-							Toast.makeText (getApplicationContext (), "Step 3", Toast.LENGTH_LONG).show ();
-							emit();
-						}
-
-						break;
-					default:
-						break;
+						Log.d("Sensor reading  (DB)", maxDB + "");
+						Log.d("Est. Dist:", sensorDistances.get(0) + "");
+						//Toast.makeText(getApplicationContext(), "Est. Dist 1: " + sensorDistances.get(0), Toast.LENGTH_LONG).show();
 					}
-				}
-			};
+				};
+				
+				sm.execute((int) (duration * 1000));
+			}
+		});
+	}
+	
+	private void queueEmit(int startTime) {
+
+		// Schedule sound to occur straight away for 2 seconds
+		t.addTask(startTime *1000, new PulseTimeredTask (generatedSnd, sampleRate));
+
+	}
+	
+	
+	private void uploadData() {
+		Toast.makeText (getApplicationContext (), "Uploading data...", Toast.LENGTH_LONG).show ();
+		
+		for (int i = 0; i < sensorDistances.size(); i++) {
+			Log.d("Data", sensorDistances.get(i)+"");
+		}
+		
+		
+		String dataUploadString = "setup," + listenerID + ",";
+		
+		// Data for distance of other 2 landmarks in ascending order
+		for (int i = 0; i < sensorDistances.size(); i++) {
+			dataUploadString += sensorDistances.get(i) + ",";
+			
+			if (i > 2) {
+				break;
+			}
+			
+		}
+		
+		// Add Time and Session ID
+		dataUploadString += System.currentTimeMillis() + "," + sessionID;
+		
+		Log.d("Setup Data Send, ID " + listenerID, dataUploadString);
+		Toast.makeText (getApplicationContext (), dataUploadString, Toast.LENGTH_LONG).show ();
+		
+		SendData sendData = new SendData() {
+			@Override
+			protected void onPostExecute(String result) {
+				super.onPostExecute(result);
+				
+				// Get other data from server
+				getSetupData(7 * 1000);
+			}
+		};
+		
+		// Send data to server
+		sendData.execute(dataUploadString);
+	}
+	
+	private void getSetupData(int initialWaitTime) {
+		
+		if (sensorDistances.size() > 2 && sensorDistances.size() < 0) {
+			Toast.makeText (getApplicationContext (), "No local data.", Toast.LENGTH_LONG).show ();
+			Log.d("Local Data Error", "No local data of nodes.");
+		}
+		
+
+		final TaskedTimer task = new TaskedTimer(null);
+		
+		// Wait N seconds then start task
+		task.addTask(initialWaitTime, new ScheduledTask() {
+			
+			@Override
+			public void doTask(Object... arg0) {
+
+				final ReceiveData receiveData = new ReceiveData() {
+					
+					@Override
+					protected void onPostExecute(String result) {
+						// TODO Auto-generated method stub
+						super.onPostExecute(result);
+						
+						double id1l1l2 = 0, id1l1l3 = 0;
+						double id2l2l1 = 0, id2l2l3 = 0;
+						double id3l3l1 = 0, id3l3l2 = 0;
+						
+						// Go through all data
+						for (twitter4j.Status status : this.feed.getTweets()) {
+							String[] statusData = status.getText().split(",");
+							
+							Log.d("Setup pulled data", status.getText());
+							
+							// Check if data is for setup
+							if (!statusData[0].equals("setup")) {
+								continue;
+							}
+							
+							// Check for current session
+							if (!statusData[statusData.length-1].equals(sessionID)) {
+								continue;
+							}
+							
+							int dataID = Integer.parseInt(statusData[1]);
+							
+							// Place data in Graph
+							if (listenerID == dataID) {
+								continue;
+							}
+							
+							switch (dataID) {
+							case 1:
+								id1l1l2 = Double.parseDouble(statusData[2]);
+								id1l1l3 = Double.parseDouble(statusData[3]);
+								
+								break;
+
+							case 2:
+								id2l2l1 = Double.parseDouble(statusData[2]);
+								id2l2l3 = Double.parseDouble(statusData[3]);
+								
+								break;
+							case 3:
+								id3l3l1 = Double.parseDouble(statusData[2]);
+								id3l3l2 = Double.parseDouble(statusData[3]);
+								
+								break;								
+							default:
+								break;
+							}
+						}
+						
+						Log.d("000", id1l1l2 + " " + id1l1l3 + " " + id2l2l1 + " " + id2l2l3 +
+								id3l3l1 + " " + id3l3l2);
+						
+						double l1l2 = 0, l1l3 = 0, l2l3 = 0;
+						
+						gv.resetGraph();
+						// Store average distance
+						switch (listenerID) {
+						case 1:
+							l1l2 = average(id2l2l1, sensorDistances.get(0));
+							l1l3 = average(id3l3l1, sensorDistances.get(1));
+							l2l3 = average(id2l2l3, id3l3l2);
+
+							break;
+						case 2:
+							l1l2 = average(id1l1l2, sensorDistances.get(0));
+							l2l3 = average(id3l3l2, sensorDistances.get(1));
+							l1l3 = average(id3l3l1, id1l1l3);
+							
+							break;
+						case 3:
+							l1l2 = average(id1l1l2, id2l2l1);
+							l2l3 = average(id2l2l3, sensorDistances.get(0));
+							l1l3 = average(id1l1l3, sensorDistances.get(1));
+							
+							break;
+						default:
+							break;
+						}
+						
+						Log.d("Graphing Distances", l1l2 + "");
+						Log.d("Graphing Distances", l2l3 + "");
+						Log.d("Graphing Distances", l1l3 + "");
+						
+						gv.addLandmarkEdge (GraphView.landmark1, GraphView.landmark2, l1l2);
+						gv.addLandmarkEdge (GraphView.landmark2, GraphView.landmark3, l2l3);
+						gv.addLandmarkEdge (GraphView.landmark3, GraphView.landmark1, l1l3);
+						
+						gv.invalidate();
+					}
+				};
+				
+				receiveData.execute();
+				task.stopTimer();
+			}
 		});
 		
+		task.startTimer();
+	}
+	
+	public static double average(Double... vals)
+	{
+		double sum = 0;
+		
+		for (int i = 0; i < vals.length; i++) {
+			sum += vals[i];
+		}
+		
+		return sum / vals.length;
 	}
 
+	
 	public void trackEmitter() {
 		if (!isStationary()) {
 			Toast.makeText(
@@ -317,12 +424,12 @@ public class ListenerActivity extends Activity implements SensorEventListener,
 								
 								for (twitter4j.Status status : this.feed.getTweets()) {
 
-									// Get Current DateTime
-									Date now = new Date();
-									
-									// Creation DateTime of Data
-									Date createdDate = status.getCreatedAt();
-
+//									// Get Current DateTime
+//									Date now = new Date();
+//									
+//									// Creation DateTime of Data
+//									Date createdDate = status.getCreatedAt();
+//
 //									// Check that data is at most 3 minutes old
 //									if (createdDate.getDate() == now.getDate() &&
 //										createdDate.getHours() == now.getHours() &&
