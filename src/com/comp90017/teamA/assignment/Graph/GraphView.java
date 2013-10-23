@@ -42,6 +42,8 @@ public class GraphView extends View
 
 	public static double										estimationNoise		= 1;
 
+	protected int												scale				= 20;
+
 
 	public GraphView (Context context, AttributeSet attr)
 	{
@@ -81,8 +83,7 @@ public class GraphView extends View
 		super.onDraw (canvas);
 
 		int offsetX = 125;
-		int offsetY = 125;
-		int scale = 20;
+		int offsetY = 50;
 		int vertexSize = 5;
 
 		try
@@ -193,11 +194,11 @@ public class GraphView extends View
 				canvas.drawLine ((float) landmark3Coord.getX () * scale + offsetX, (float) landmark3Coord.getY () * scale + offsetY,
 						(float) landmark2Coord.getX () * scale + offsetX, (float) landmark2Coord.getY () * scale + offsetY, edgeColor);
 
-			canvas.drawCircle ((int) landmark1Coord.getX () * scale + offsetX, (int) landmark1Coord.getY () * scale + offsetY, vertexSize,
+			canvas.drawCircle ((float) landmark1Coord.getX () * scale + offsetX, (float) landmark1Coord.getY () * scale + offsetY, vertexSize,
 					thisVertexColor);
-			canvas.drawCircle ((int) landmark2Coord.getX () * scale + offsetX, (int) landmark2Coord.getY () * scale + offsetY, vertexSize,
+			canvas.drawCircle ((float) landmark2Coord.getX () * scale + offsetX, (float) landmark2Coord.getY () * scale + offsetY, vertexSize,
 					vertexColor);
-			canvas.drawCircle ((int) landmark3Coord.getX () * scale + offsetX, (int) landmark3Coord.getY () * scale + offsetY, vertexSize,
+			canvas.drawCircle ((float) landmark3Coord.getX () * scale + offsetX, (float) landmark3Coord.getY () * scale + offsetY, vertexSize,
 					vertexColor);
 
 			if (emitterSet && emitterValid)
@@ -353,5 +354,17 @@ public class GraphView extends View
 		}
 
 		return nonNulls;
+	}
+
+
+	public int getScale()
+	{
+		return scale;
+	}
+
+
+	public void setScale(int scale)
+	{
+		this.scale = scale;
 	}
 }
