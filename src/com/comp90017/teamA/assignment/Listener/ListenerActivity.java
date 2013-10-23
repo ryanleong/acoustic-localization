@@ -62,7 +62,7 @@ public class ListenerActivity extends Activity implements SensorEventListener,
 	// Used for keeping order of setup
 	TaskedTimer t;
 	int step = 0;
-	private ArrayList<Double> sensorDistances = new ArrayList<Double>();
+	private ArrayList<Double> sensorDistances;
 
 	
 	/** Called when the activity is first created. */
@@ -86,7 +86,7 @@ public class ListenerActivity extends Activity implements SensorEventListener,
 		Button trackEmitterButton = (Button) findViewById(R.id.TrackEmitterBtn);
 		Button queryButton = (Button) findViewById(R.id.queryBtn);
 		Button setupEmitButton = (Button) findViewById(R.id.setupEmitBtn);
-		Button setupReceiveButton = (Button) findViewById(R.id.setupReceiveBtn);
+		Button setupReceiveButton = (Button) findViewById(R.id.setupQueryBtn);
 		
 		trackEmitterButton.setOnClickListener(this);
 		queryButton.setOnClickListener(this);
@@ -108,9 +108,11 @@ public class ListenerActivity extends Activity implements SensorEventListener,
 			setupListeners();
 			break;
 		
-		case R.id.setupReceiveBtn:
+		case R.id.setupQueryBtn:
 			Toast.makeText (getApplicationContext (), "Current does nothing.", Toast.LENGTH_LONG).show ();
 
+			queueDownloadSetup(0);
+			t.startTimer();
 			break;
 		case R.id.TrackEmitterBtn :
 				Toast.makeText (getApplicationContext (), "Tracking Emitter...", Toast.LENGTH_LONG).show ();
@@ -134,6 +136,7 @@ public class ListenerActivity extends Activity implements SensorEventListener,
 
 	public void setupListeners() {
 		t = new TaskedTimer(null);
+		sensorDistances = new ArrayList<Double>();
 		generateTone();
 		
 		switch (listenerID) {
@@ -157,7 +160,24 @@ public class ListenerActivity extends Activity implements SensorEventListener,
 		default:
 			break;
 		}
+		
+		queueUpload(9);
+		
+		queueDownloadSetup(12);
 
+		// Task to stop all
+		t.addTask(15 * 1000, new ScheduledTask() {
+			
+			@Override
+			public void doTask(Object... arg0) {
+				
+				Log.d("Size of", "" + sensorDistances.size());
+				
+				t.stopTimer();
+			}
+		});
+		
+		// Start all task
 		t.startTimer();
 	}
 	
@@ -194,63 +214,47 @@ public class ListenerActivity extends Activity implements SensorEventListener,
 
 	}
 	
-	
-	private void uploadData() {
-		Toast.makeText (getApplicationContext (), "Uploading data...", Toast.LENGTH_LONG).show ();
+	private void queueUpload(int startTime) {
 		
-		for (int i = 0; i < sensorDistances.size(); i++) {
-			Log.d("Data", sensorDistances.get(i)+"");
-		}
-		
-		
-		String dataUploadString = "setup," + listenerID + ",";
-		
-		// Data for distance of other 2 landmarks in ascending order
-		for (int i = 0; i < sensorDistances.size(); i++) {
-			dataUploadString += sensorDistances.get(i) + ",";
-			
-			if (i > 2) {
-				break;
-			}
-			
-		}
-		
-		// Add Time and Session ID
-		dataUploadString += System.currentTimeMillis() + "," + sessionID;
-		
-		Log.d("Setup Data Send, ID " + listenerID, dataUploadString);
-		Toast.makeText (getApplicationContext (), dataUploadString, Toast.LENGTH_LONG).show ();
-		
-		SendData sendData = new SendData() {
-			@Override
-			protected void onPostExecute(String result) {
-				super.onPostExecute(result);
-				
-				// Get other data from server
-				getSetupData(7 * 1000);
-			}
-		};
-		
-		// Send data to server
-		sendData.execute(dataUploadString);
-	}
-	
-	private void getSetupData(int initialWaitTime) {
-		
-		if (sensorDistances.size() > 2 && sensorDistances.size() < 0) {
-			Toast.makeText (getApplicationContext (), "No local data.", Toast.LENGTH_LONG).show ();
-			Log.d("Local Data Error", "No local data of nodes.");
-		}
-		
-
-		final TaskedTimer task = new TaskedTimer(null);
-		
-		// Wait N seconds then start task
-		task.addTask(initialWaitTime, new ScheduledTask() {
+		t.addTask(startTime * 1000, new ScheduledTask() {
 			
 			@Override
 			public void doTask(Object... arg0) {
+				// TODO Auto-generated method stub
+				
+				String dataUploadString = "setup," + listenerID + ",";
+				
+				// Data for distance of other 2 landmarks in ascending order
+				for (int i = 0; i < sensorDistances.size(); i++) {
+					dataUploadString += sensorDistances.get(i) + ",";
+					
+					if (i > 1) {
+						break;
+					}
+					
+				}
+				
+				// Add Time and Session ID
+				dataUploadString += System.currentTimeMillis() + "," + sessionID;
+				
+				Log.d("Setup Data Send, ID " + listenerID, dataUploadString);
+				Toast.makeText (getApplicationContext (), dataUploadString, Toast.LENGTH_LONG).show ();
+				
+				// Send data to server
+				new SendData().execute(dataUploadString);
+			}
+		});
 
+	}
+	
+	private void queueDownloadSetup(int startTime) {
+		
+		t.addTask(startTime * 1000, new ScheduledTask() {
+			
+			@Override
+			public void doTask(Object... arg0) {
+				// TODO Auto-generated method stub
+				
 				final ReceiveData receiveData = new ReceiveData() {
 					
 					@Override
@@ -337,24 +341,23 @@ public class ListenerActivity extends Activity implements SensorEventListener,
 							break;
 						}
 						
-						Log.d("Graphing Distances", l1l2 + "");
-						Log.d("Graphing Distances", l2l3 + "");
-						Log.d("Graphing Distances", l1l3 + "");
+						Log.d("Graphing Distances", 100 * l1l2 + "");
+						Log.d("Graphing Distances", 100 * l2l3 + "");
+						Log.d("Graphing Distances", 100 * l1l3 + "");
 						
-						gv.addLandmarkEdge (GraphView.landmark1, GraphView.landmark2, l1l2);
-						gv.addLandmarkEdge (GraphView.landmark2, GraphView.landmark3, l2l3);
-						gv.addLandmarkEdge (GraphView.landmark3, GraphView.landmark1, l1l3);
+						gv.addLandmarkEdge (GraphView.landmark1, GraphView.landmark2, 100 * l1l2);
+						gv.addLandmarkEdge (GraphView.landmark2, GraphView.landmark3, 100 * l2l3);
+						gv.addLandmarkEdge (GraphView.landmark3, GraphView.landmark1, 100 * l1l3);
 						
 						gv.invalidate();
 					}
 				};
 				
 				receiveData.execute();
-				task.stopTimer();
 			}
 		});
-		
-		task.startTimer();
+
+
 	}
 	
 	public static double average(Double... vals)
@@ -525,22 +528,6 @@ public class ListenerActivity extends Activity implements SensorEventListener,
 				boolean[] isFound = {false, false, false};
 				
 				for (twitter4j.Status status : this.feed.getTweets()) {
-
-					// Get Current DateTime
-					Date now = new Date();
-					
-					// Creation DateTime of Data
-					Date createdDate = status.getCreatedAt();
-
-//					// Check that data is at most 3 minutes old
-//					if (createdDate.getDate() == now.getDate() &&
-//						createdDate.getHours() == now.getHours() &&
-//						(now.getMinutes() - createdDate.getMinutes()) > 3) {
-//						
-//						Log.d("Twitter Feed", "Data created at " + createdDate.toString() + 
-//								" is too old to be used");
-//						continue;
-//					}
 					
 					String temp2 = status.getText();
 					String[] feedData = temp2.split(",");
@@ -575,7 +562,6 @@ public class ListenerActivity extends Activity implements SensorEventListener,
 						}
 					}
 				}
-				
 				
 			}
 		};

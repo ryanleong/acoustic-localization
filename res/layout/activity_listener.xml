@@ -93,14 +93,14 @@
 		        style="?android:attr/buttonStyleSmall"
 		        android:layout_width="wrap_content"
 		        android:layout_height="wrap_content"
-		        android:text="Setup Emit" />
+		        android:text="Setup Landmarks" />
 		    
 		    <Button
-		        android:id="@+id/setupReceiveBtn"
+		        android:id="@+id/setupQueryBtn"
 		        style="?android:attr/buttonStyleSmall"
 		        android:layout_width="wrap_content"
 		        android:layout_height="wrap_content"
-		        android:text="Nothing" />
+		        android:text="Query Setup" />
         </TableRow>
         
 		<TableRow>

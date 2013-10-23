@@ -50,7 +50,7 @@ public final class R {
         public static final int pulseCountTV=0x7f09000f;
         public static final int queryBtn=0x7f09001b;
         public static final int setupEmitBtn=0x7f090018;
-        public static final int setupReceiveBtn=0x7f090019;
+        public static final int setupQueryBtn=0x7f090019;
         public static final int testGraphView=0x7f090010;
         public static final int textView1=0x7f090004;
         public static final int textView2=0x7f090008;
