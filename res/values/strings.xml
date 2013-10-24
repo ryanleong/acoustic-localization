@@ -35,11 +35,8 @@
     <string name="x_axis">X-Axis</string>
     <string name="y_axis">Y-Axis</string>
     <string name="z_axis">z-Axis</string>
-    
     <string name="listener_id">Listener ID</string>
-    
     <string name="accelerometer">Accelerometer</string>
-    
     <string name="listener_id_prompt">Choose a unique ID for your listener</string>
     <string name="title_activity_listener">ListenerActivity</string>
     <string name="title_activity_graph_test">GraphTest</string>
